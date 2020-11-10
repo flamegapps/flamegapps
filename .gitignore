@@ -1,0 +1,9 @@
+.vscode
+.idea
+repo
+builds
+temp_core
+temp_gapps
+zip_dir
+*.code-workspace
+installed_*
