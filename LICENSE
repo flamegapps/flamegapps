@@ -1,0 +1,7 @@
+The FlameGApps scripts come without warranty of ANY kind.
+This project is distributed as FOSS (Free and Open Source Software) under good faith that users of this project would be prohibited from producing public mirrors of builds compiled using these scripts.
+These scripts are written for your convenience, and The FlameGApps Project does not have and/or claim to be the ownership of any of the files (including but not limited to APKs) fetched during the usage of these scripts.
+The APKs fetched by these scripts are proprietary software which are developed and owned by Google LLC and its business partners.
+
+BusyBox is subject to the GPLv2, its license can be found at https://www.busybox.net/license.html
+Parts of these scripts are also licensed under version 3 of the GNU General Public License that can be found at https://www.gnu.org/licenses/gpl-3.0.en.html
