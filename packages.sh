@@ -21,7 +21,7 @@ download_basic_28() {
   download_apk GmsCoreSetupPrebuilt sdk-all/priv-app
   download_apk GoogleExtServices sdk-28/priv-app
   download_apk GoogleServicesFramework sdk-28/priv-app
-  download_apk PrebuiltGmsCorePi sdk-28/priv-app
+  download_apk PrebuiltGmsCore sdk-28/priv-app
   download_apk Phonesky sdk-all/priv-app
 
   download_file default-permissions.xml sdk-28/etc/default-permissions
@@ -85,7 +85,7 @@ download_basic_29() {
   download_apk GmsCoreSetupPrebuilt sdk-all/priv-app
   download_apk GoogleExtServices sdk-29/priv-app
   download_apk GoogleServicesFramework sdk-29/priv-app
-  download_apk PrebuiltGmsCoreQt sdk-29/priv-app
+  download_apk PrebuiltGmsCore sdk-29/priv-app
   download_apk Phonesky sdk-all/priv-app
 
   download_file default-permissions.xml sdk-29/etc/default-permissions

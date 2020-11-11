@@ -148,7 +148,7 @@ priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
 priv-app/Phonesky/Phonesky.apk
-priv-app/PrebuiltGmsCorePi/PrebuiltGmsCorePi.apk
+priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
 priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk
 etc/default-permissions/default-permissions.xml
@@ -276,7 +276,7 @@ priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
 priv-app/Phonesky/Phonesky.apk
-priv-app/PrebuiltGmsCorePi/PrebuiltGmsCorePi.apk
+priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
 priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk
 priv-app/GoogleContacts/GoogleContacts.apk
@@ -511,7 +511,7 @@ priv-app/GoogleBackupTransport/GoogleBackupTransport.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
 priv-app/Phonesky/Phonesky.apk
-priv-app/PrebuiltGmsCoreQt/PrebuiltGmsCoreQt.apk
+priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
 priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk
 etc/default-permissions/default-permissions.xml
@@ -641,7 +641,7 @@ priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
 priv-app/Phonesky/Phonesky.apk
-priv-app/PrebuiltGmsCoreQt/PrebuiltGmsCoreQt.apk
+priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
 priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk
 priv-app/GoogleContacts/GoogleContacts.apk
