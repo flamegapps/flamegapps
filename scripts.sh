@@ -305,6 +305,7 @@ framework/com.google.android.media.effects.jar
 app/MarkupGoogle/lib/arm64/libsketchology_native.so
 lib64/libjni_latinimegoogle.so
 lib64/libbarhopper.so
+product/overlay/GoogleDialerOverlay.apk
 EOF
 }
 
@@ -671,6 +672,7 @@ framework/com.google.android.media.effects.jar
 app/MarkupGoogle/lib/arm64/libsketchology_native.so
 lib64/libjni_latinimegoogle.so
 lib64/libbarhopper.so
+product/overlay/GoogleDialerOverlay.apk
 EOF
 }
 
@@ -1038,6 +1040,7 @@ framework/com.google.android.media.effects.jar
 app/MarkupGoogle/lib/arm64/libsketchology_native.so
 lib64/libjni_latinimegoogle.so
 lib64/libbarhopper.so
+product/overlay/GoogleDialerOverlay.apk
 EOF
 }
 

@@ -74,6 +74,7 @@ download_full_28() {
   download_apk Turbo sdk-all/priv-app
   download_file libbarhopper.so sdk-all/lib64
   download_file libjni_latinimegoogle.so sdk-all/lib64
+  download_file GoogleDialerOverlay.apk sdk-all/product/overlay
 }
 
 # Android 10
@@ -139,6 +140,7 @@ download_full_29() {
   download_apk Turbo sdk-all/priv-app
   download_file libbarhopper.so sdk-all/lib64
   download_file libjni_latinimegoogle.so sdk-all/lib64
+  download_file GoogleDialerOverlay.apk sdk-all/product/overlay
 }
 
 
@@ -204,4 +206,5 @@ download_full_30() {
   download_apk Turbo sdk-all/priv-app
   download_file libbarhopper.so sdk-all/lib64
   download_file libjni_latinimegoogle.so sdk-all/lib64
+  download_file GoogleDialerOverlay.apk sdk-all/product/overlay
 }

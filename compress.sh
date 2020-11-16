@@ -226,11 +226,12 @@ mk_contact() {
   compress_gapps "GoogleContacts.tar.xz"
 }
 
-
 mk_dialer() {
   echo ">>> Compressing GoogleDialer"
   make_priv_app
+  mkdir -p $GAPPS_DIR/system/product/overlay
   copy_file $SDK_ALL/priv-app/GoogleDialer $GAPPS_DIR/system/priv-app/
+  copy_file $SDK_ALL/product/overlay/GoogleDialerOverlay.apk $GAPPS_DIR/system/product/overlay/
   compress_gapps "GoogleDialer.tar.xz"
 }
 
