@@ -814,7 +814,7 @@ full_config() {
     if [ "$rm_turbo" = "1" ]; then
       ui_print "- Removing DeviceHealthServices"
       sleep 0.3
-      rm -rf $SYSTEM/priv-app/GoogleDialer
+      rm -rf $SYSTEM/priv-app/Turbo
       remove_line $TMP/addon.d.sh "priv-app/Turbo/Turbo.apk"
     fi
     if [ "$rm_wallpapers" = "1" ]; then
