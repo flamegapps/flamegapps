@@ -24,7 +24,7 @@ The script will automatically check for, download, and install required utilitie
  For instance: To build FlameGApps Basic edition for Android 10, run ``bash build.sh 10 basic``
 
 ## Links
- [Website](https://flamegapps.github.io) | [SourceForge](https://sourceforge.net/projects/flamegapps/files/arm64/) | [XDA](https://forum.xda-developers.com/android/software/gapps-flamegapps-android-t4020917) | [News & Releases](https://t.me/FlameGApps) | [Discussion](https://t.me/FlameGAppsSupport)
+ [Website](https://flamegapps.github.io) | [SourceForge](https://sourceforge.net/projects/flamegapps/files/arm64/) | [XDA](https://forum.xda-developers.com/android/software/gapps-flamegapps-android-t4020917) | [News & Releases](https://telegram.me/FlameGApps) | [Discussion](https://telegram.me/FlameGAppsSupport)
 
 ## License
 - The FlameGApps Project is licensed under the GPLv3.
