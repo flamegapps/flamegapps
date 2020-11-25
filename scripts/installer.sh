@@ -77,6 +77,7 @@ app/ExactCalculator
 app/RevengeOSCalculator
 app/Calendar
 app/CalendarPrebuilt
+app/SimpleCalendar
 app/Eleven
 app/message
 app/messages
