@@ -238,9 +238,7 @@ mk_dialer() {
 mk_messages() {
   echo ">>> Compressing GoogleMessages"
   make_app
-  mkdir -p $GAPPS_DIR/system/lib64
   copy_file $SDK_ALL/app/PrebuiltBugle $GAPPS_DIR/system/app/
-  copy_file $SDK_ALL/lib64/libbarhopper.so $GAPPS_DIR/system/lib64/
   compress_gapps "GoogleMessages.tar.xz"
 }
 

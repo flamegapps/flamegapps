@@ -72,7 +72,6 @@ download_full_28() {
   download_apk GoogleContacts sdk-all/priv-app
   download_apk GoogleDialer sdk-all/priv-app
   download_apk Turbo sdk-all/priv-app
-  download_file libbarhopper.so sdk-all/lib64
   download_file libjni_latinimegoogle.so sdk-all/lib64
   download_file GoogleDialerOverlay.apk sdk-all/product/overlay
 }
@@ -138,7 +137,6 @@ download_full_29() {
   download_apk GoogleContacts sdk-all/priv-app
   download_apk GoogleDialer sdk-all/priv-app
   download_apk Turbo sdk-all/priv-app
-  download_file libbarhopper.so sdk-all/lib64
   download_file libjni_latinimegoogle.so sdk-all/lib64
   download_file GoogleDialerOverlay.apk sdk-all/product/overlay
 }
@@ -204,7 +202,6 @@ download_full_30() {
   download_apk GoogleContacts sdk-all/priv-app
   download_apk GoogleDialer sdk-all/priv-app
   download_apk Turbo sdk-all/priv-app
-  download_file libbarhopper.so sdk-all/lib64
   download_file libjni_latinimegoogle.so sdk-all/lib64
   download_file GoogleDialerOverlay.apk sdk-all/product/overlay
 }
