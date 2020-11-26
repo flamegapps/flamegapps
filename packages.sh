@@ -161,6 +161,7 @@ download_basic_30() {
   download_file com.google.android.maps.xml sdk-30/etc/permissions
   download_file com.google.android.media.effects.xml sdk-30/etc/permissions
   download_file privapp-permissions-google.xml sdk-30/etc/permissions
+  download_file split-permissions-google.xml sdk-30/etc/permissions
 
   download_file google.xml sdk-30/etc/preferred-apps
 

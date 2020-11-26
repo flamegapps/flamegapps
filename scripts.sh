@@ -890,6 +890,7 @@ etc/permissions/com.google.android.dialer.support.xml
 etc/permissions/com.google.android.maps.xml
 etc/permissions/com.google.android.media.effects.xml
 etc/permissions/privapp-permissions-google.xml
+etc/permissions/split-permissions-google.xml
 etc/preferred-apps/google.xml
 etc/sysconfig/dialer_experience.xml
 etc/sysconfig/google-hiddenapi-package-whitelist.xml
@@ -1023,6 +1024,7 @@ etc/permissions/com.google.android.dialer.support.xml
 etc/permissions/com.google.android.maps.xml
 etc/permissions/com.google.android.media.effects.xml
 etc/permissions/privapp-permissions-google.xml
+etc/permissions/split-permissions-google.xml
 etc/preferred-apps/google.xml
 etc/sysconfig/dialer_experience.xml
 etc/sysconfig/google-hiddenapi-package-whitelist.xml
