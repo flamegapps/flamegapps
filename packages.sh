@@ -7,7 +7,7 @@
 #
 # The FlameGApps scripts are free software, you can redistribute and/or modify them.
 #
-# These scripts are distributed in the hope that they'll will be useful, but WITHOUT ANY WARRANTY.
+# These scripts are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY.
 #
 ###########################################
 #
@@ -57,7 +57,7 @@ download_basic_28() {
   download_apk GoogleBackupTransport sdk-all/priv-app
   download_apk GoogleRestore sdk-all/priv-app
   download_apk GoogleCalendarSyncAdapter sdk-all/app
-  download_file libsketchology_native.so sdk-28/app/MarkupGoogle/lib/arm64
+  download_file libsketchology_native.so sdk-28/lib64
 }
 
 download_full_28() {
@@ -122,7 +122,7 @@ download_basic_29() {
   download_apk GoogleBackupTransport sdk-all/priv-app
   download_apk GoogleRestore sdk-all/priv-app
   download_apk GoogleCalendarSyncAdapter sdk-all/app
-  download_file libsketchology_native.so sdk-29/app/MarkupGoogle/lib/arm64
+  download_file libsketchology_native.so sdk-29/lib64
 }
 
 download_full_29() {
@@ -188,7 +188,7 @@ download_basic_30() {
   download_apk GoogleBackupTransport sdk-all/priv-app
   download_apk GoogleRestore sdk-all/priv-app
   download_apk GoogleCalendarSyncAdapter sdk-all/app
-  download_file libsketchology_native.so sdk-30/app/MarkupGoogle/lib/arm64
+  download_file libsketchology_native.so sdk-30/lib64
 }
 
 download_full_30() {

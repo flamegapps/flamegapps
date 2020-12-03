@@ -7,7 +7,7 @@
 #
 # The FlameGApps scripts are free software, you can redistribute and/or modify them.
 #
-# These scripts are distributed in the hope that they'll will be useful, but WITHOUT ANY WARRANTY.
+# These scripts are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY.
 #
 ###########################################
 #
@@ -110,8 +110,8 @@ mk_markup_28() {
   echo ">>> Compressing MarkupGoogle"
   make_app
   copy_file $SDK_28/app/MarkupGoogle $GAPPS_DIR/system/app/
-  mkdir -p $GAPPS_DIR/system/app/MarkupGoogle/lib/arm64
-  copy_file $SDK_28/app/MarkupGoogle/lib/arm64/libsketchology_native.so $GAPPS_DIR/system/app/MarkupGoogle/lib/arm64/
+  mkdir -p $GAPPS_DIR/system/lib64
+  copy_file $SDK_28/lib64/libsketchology_native.so $GAPPS_DIR/system/lib64/
   compress_gapps "MarkupGoogle.tar.xz"
 }
 
@@ -119,8 +119,8 @@ mk_markup_29() {
   echo ">>> Compressing MarkupGoogle"
   make_app
   copy_file $SDK_29/app/MarkupGoogle $GAPPS_DIR/system/app/
-  mkdir -p $GAPPS_DIR/system/app/MarkupGoogle/lib/arm64
-  copy_file $SDK_29/app/MarkupGoogle/lib/arm64/libsketchology_native.so $GAPPS_DIR/system/app/MarkupGoogle/lib/arm64/
+  mkdir -p $GAPPS_DIR/system/lib64
+  copy_file $SDK_29/lib64/libsketchology_native.so $GAPPS_DIR/system/lib64/
   compress_gapps "MarkupGoogle.tar.xz" 
 }
 
@@ -128,8 +128,8 @@ mk_markup_30() {
   echo ">>> Compressing MarkupGoogle"
   make_app
   copy_file $SDK_30/app/MarkupGoogle $GAPPS_DIR/system/app/
-  mkdir -p $GAPPS_DIR/system/app/MarkupGoogle/lib/arm64
-  copy_file $SDK_30/app/MarkupGoogle/lib/arm64/libsketchology_native.so $GAPPS_DIR/system/app/MarkupGoogle/lib/arm64/
+  mkdir -p $GAPPS_DIR/system/lib64
+  copy_file $SDK_30/lib64/libsketchology_native.so $GAPPS_DIR/system/lib64/
   compress_gapps "MarkupGoogle.tar.xz"
 }
 

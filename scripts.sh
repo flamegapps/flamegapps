@@ -171,7 +171,7 @@ etc/flame.prop
 framework/com.google.android.dialer.support.jar
 framework/com.google.android.maps.jar
 framework/com.google.android.media.effects.jar
-app/MarkupGoogle/lib/arm64/libsketchology_native.so
+lib64/libsketchology_native.so
 EOF
 }
 
@@ -302,7 +302,7 @@ etc/flame.prop
 framework/com.google.android.dialer.support.jar
 framework/com.google.android.maps.jar
 framework/com.google.android.media.effects.jar
-app/MarkupGoogle/lib/arm64/libsketchology_native.so
+lib64/libsketchology_native.so
 lib64/libjni_latinimegoogle.so
 product/overlay/GoogleDialerOverlay.apk
 EOF
@@ -536,7 +536,7 @@ etc/flame.prop
 framework/com.google.android.dialer.support.jar
 framework/com.google.android.maps.jar
 framework/com.google.android.media.effects.jar
-app/MarkupGoogle/lib/arm64/libsketchology_native.so
+lib64/libsketchology_native.so
 EOF
 }
 
@@ -669,7 +669,7 @@ etc/flame.prop
 framework/com.google.android.dialer.support.jar
 framework/com.google.android.maps.jar
 framework/com.google.android.media.effects.jar
-app/MarkupGoogle/lib/arm64/libsketchology_native.so
+lib64/libsketchology_native.so
 lib64/libjni_latinimegoogle.so
 product/overlay/GoogleDialerOverlay.apk
 EOF
@@ -905,7 +905,7 @@ etc/flame.prop
 framework/com.google.android.dialer.support.jar
 framework/com.google.android.maps.jar
 framework/com.google.android.media.effects.jar
-app/MarkupGoogle/lib/arm64/libsketchology_native.so
+lib64/libsketchology_native.so
 EOF
 }
 
@@ -1039,7 +1039,7 @@ etc/flame.prop
 framework/com.google.android.dialer.support.jar
 framework/com.google.android.maps.jar
 framework/com.google.android.media.effects.jar
-app/MarkupGoogle/lib/arm64/libsketchology_native.so
+lib64/libsketchology_native.so
 lib64/libjni_latinimegoogle.so
 product/overlay/GoogleDialerOverlay.apk
 EOF
