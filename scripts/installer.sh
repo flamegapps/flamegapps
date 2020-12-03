@@ -8,7 +8,7 @@
 #
 # The FlameGApps scripts are free software, you can redistribute and/or modify them.
 #
-# These scripts are distributed in the hope that they'll will be useful, but WITHOUT ANY WARRANTY.
+# These scripts are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY.
 #
 ###########################################
 # File Name    : installer.sh
@@ -874,6 +874,17 @@ sleep 0.5
 set_progress 0.80
 ui_print " "
 ui_print "- Performing other tasks"
+# Create lib symlinks
+if [ -e $SYSTEM/app/MarkupGoogle/MarkupGoogle.apk ]; then
+  install -d "$SYSTEM/app/MarkupGoogle/lib/arm64"
+  ln -sfn "/system/lib64/libsketchology_native.so" "/system/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+fi
+
+if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
+  install -d "$SYSTEM/app/LatinIMEGooglePrebuilt/lib64/arm64"
+  ln -sfn "/system/lib64/libjni_latinimegoogle.so" "/system/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
+fi
+
 # Delete provision and lineage setupwizard if Google SetupWizard is present
 if [ -e $SYSTEM/priv-app/SetupWizard/SetupWizard.apk ]; then
   rm -rf $SYSTEM/priv-app/Provision

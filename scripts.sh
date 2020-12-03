@@ -223,7 +223,10 @@ case "$1" in
     
   ;;
   post-restore)
-    ##
+    # Create lib symlinks
+    install -d "$SYS/app/MarkupGoogle/lib/arm64"
+    ln -sfn "$SYS/lib64/libsketchology_native.so" "$SYS/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+
     for i in $(list_files); do
       chown root:root "$SYS/$i"
       chmod 644 "$SYS/$i"
@@ -466,7 +469,12 @@ case "$1" in
     done
   ;;
   post-restore)
-    ##
+    # Create lib symlinks
+    install -d "$SYS/app/MarkupGoogle/lib/arm64"
+    ln -sfn "$SYS/lib64/libsketchology_native.so" "$SYS/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+    install -d "$SYS/app/LatinIMEGooglePrebuilt/lib64/arm64"
+    ln -sfn "$SYS/lib64/libjni_latinimegoogle.so" "$SYS/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
+
     for i in $(list_files); do
       chown root:root "$SYS/$i"
       chmod 644 "$SYS/$i"
@@ -589,7 +597,10 @@ case "$1" in
     
   ;;
   post-restore)
-    ##
+    # Create lib symlinks
+    install -d "$SYS/app/MarkupGoogle/lib/arm64"
+    ln -sfn "$SYS/lib64/libsketchology_native.so" "$SYS/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+
     for i in $(list_files); do
       chown root:root "$SYS/$i"
       chmod 644 "$SYS/$i"
@@ -835,7 +846,12 @@ case "$1" in
     done
   ;;
   post-restore)
-    ##
+    # Create lib symlinks
+    install -d "$SYS/app/MarkupGoogle/lib/arm64"
+    ln -sfn "$SYS/lib64/libsketchology_native.so" "$SYS/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+    install -d "$SYS/app/LatinIMEGooglePrebuilt/lib64/arm64"
+    ln -sfn "$SYS/lib64/libjni_latinimegoogle.so" "$SYS/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
+
     for i in $(list_files); do
       chown root:root "$SYS/$i"
       chmod 644 "$SYS/$i"
@@ -959,7 +975,10 @@ case "$1" in
     
   ;;
   post-restore)
-    ##
+    # Create lib symlinks
+    install -d "$SYS/app/MarkupGoogle/lib/arm64"
+    ln -sfn "$SYS/lib64/libsketchology_native.so" "$SYS/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+
     for i in $(list_files); do
       chown root:root "$SYS/$i"
       chmod 644 "$SYS/$i"
@@ -1206,7 +1225,12 @@ case "$1" in
     done
   ;;
   post-restore)
-    ##
+    # Create lib symlinks
+    install -d "$SYS/app/MarkupGoogle/lib/arm64"
+    ln -sfn "$SYS/lib64/libsketchology_native.so" "$SYS/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+    install -d "$SYS/app/LatinIMEGooglePrebuilt/lib64/arm64"
+    ln -sfn "$SYS/lib64/libjni_latinimegoogle.so" "$SYS/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
+
     for i in $(list_files); do
       chown root:root "$SYS/$i"
       chmod 644 "$SYS/$i"
