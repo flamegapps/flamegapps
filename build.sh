@@ -8,7 +8,7 @@
 #
 # The FlameGApps scripts are free software, you can redistribute and/or modify them.
 #
-# These scripts are distributed in the hope that they'll will be useful, but WITHOUT ANY WARRANTY.
+# These scripts are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY.
 #
 ###########################################
 #
@@ -31,7 +31,6 @@ load_scripts() {
   . sourcehelper.sh
   . scripts.sh
   . compress.sh
-  . packages.sh
 }
 
 create_dir() {
@@ -142,7 +141,7 @@ else
   exit 1
 fi
 
-# Load scripts
+# Load all scripts
 load_scripts
 
 # Print working directory
@@ -150,9 +149,6 @@ echo -e "\n--> Working on $home"
 
 # Print build info
 echo "--> Building android $ANDROID $EDITION"
-
-# Download all required files
-download_${EDITION}_${SDK}
 
 clean_up
 create_dir
