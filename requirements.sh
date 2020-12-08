@@ -16,7 +16,7 @@ INSTALLED='installed_list.txt'
 
 apt list --installed > $INSTALLED 2>/dev/null
 
-REQUIRED="zip unzip tar curl xz-utils"
+REQUIRED="git zip unzip tar curl xz-utils"
 
 echo -e "\n${YELLOW}Checking installed packages $NC"
 
