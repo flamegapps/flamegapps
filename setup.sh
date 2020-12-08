@@ -8,30 +8,30 @@
 #
 # The FlameGApps scripts are free software, you can redistribute and/or modify them.
 #
-# These scripts are distributed in the hope that they'll will be useful, but WITHOUT ANY WARRANTY.
+# These scripts are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY.
 #
 ###########################################
 #
 
 if [ "$OSTYPE" = "linux-android" ]; then
-	# Install required packages for Termux
-	echo -e "\n${YELLOW}Installing required packages $NC"
-	pkg install zip unzip tar xz-utils curl
+  # Install required packages for Termux
+  echo -e "\n${YELLOW}Installing required packages $NC"
+  pkg install git zip unzip tar xz-utils
 elif [ "$OSTYPE" = "linux-gnu" ]; then
-	DISTRO=`grep -m1 "^ID=" "/etc/os-release" | cut -d= -f2`
-	if [ "$DISTRO" = "ubuntu" ]; then
-		# Install required packages for Ubuntu
-		echo -e "\n${YELLOW}Installing required packages $NC"
-		sudo apt install zip unzip tar xz-utils curl
-	elif [ "$DISTRO" = "debian" ]; then
-		# Install required packages for Debian
-		echo -e "\n${YELLOW}Installing required packages $NC"
-		sudo apt update && sudo apt dist-upgrade
-		sudo apt install zip unzip tar xz-utils curl
-	else
-		echo -e "\n${RED}This script does not support $DISTRO $NC"
-		exit 1
-	fi
+  DISTRO=`grep -m1 "^ID=" "/etc/os-release" | cut -d= -f2`
+  if [ "$DISTRO" = "ubuntu" ]; then
+    # Install required packages for Ubuntu
+    echo -e "\n${YELLOW}Installing required packages $NC"
+    sudo apt install git zip unzip tar xz-utils
+  elif [ "$DISTRO" = "debian" ]; then
+    # Install required packages for Debian
+    echo -e "\n${YELLOW}Installing required packages $NC"
+    sudo apt update && sudo apt dist-upgrade
+    sudo apt install git zip unzip tar xz-utils
+  else
+    echo -e "\n${RED}This script does not support $DISTRO $NC"
+    exit 1
+  fi
 fi
 
 exec bash $home/build.sh $arg_1 $arg_2
