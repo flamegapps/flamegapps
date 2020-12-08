@@ -7,22 +7,22 @@
 #
 # The FlameGApps scripts are free software, you can redistribute and/or modify them.
 #
-# These scripts are distributed in the hope that they'll will be useful, but WITHOUT ANY WARRANTY.
+# These scripts are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY.
 #
 ###########################################
 #
 
-INSTALLED='installed_list.txt'
+INSTALLED='installed_tools.txt'
 
 apt list --installed > $INSTALLED 2>/dev/null
 
-REQUIRED="git zip unzip tar curl xz-utils"
+REQUIRED="git zip unzip tar xz-utils"
 
-echo -e "\n${YELLOW}Checking installed packages $NC"
+echo -e "\n${YELLOW}Checking installed tools $NC"
 
 for f in $REQUIRED; do
   if ! grep -w "$f/*" $INSTALLED; then
-    echo -e "\n${YELLOW}$f is not installed. The script is going to install all required files. Make sure you are connected to the internet $NC \nPress Ctrl + C to cancel"
+    echo -e "\n${YELLOW}$f is not installed. The script is going to install all required tools. Make sure you are connected to the internet $NC \nPress Ctrl + C to cancel"
     exec bash $home/setup.sh
   fi
 done
