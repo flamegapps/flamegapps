@@ -352,6 +352,7 @@ app/Messaging
 app/Messenger
 app/messaging
 app/RevengeMessages
+app/QKSMS
 app/Email
 app/Email2
 app/Gmail
@@ -727,6 +728,7 @@ app/Messaging
 app/Messenger
 app/messaging
 app/RevengeMessages
+app/QKSMS
 app/Email
 app/Email2
 app/Gmail
@@ -1105,6 +1107,7 @@ app/Messaging
 app/Messenger
 app/messaging
 app/RevengeMessages
+app/QKSMS
 app/Email
 app/Email2
 app/Gmail
