@@ -496,6 +496,29 @@ make_addon_basic_29() {
 #
 . /tmp/backuptool.functions
 
+mount_extras() {
+  local ab_device=$(getprop ro.build.ab_update)
+  local dynamic_partition=$(getprop ro.boot.dynamic_partitions)
+  if [ -z "$ab_device" ]; then
+    for block in product system_ext vendor; do
+      if [ -e /$block ]; then
+        if [ "$dynamic_partition" = "true" ]; then
+          mount -o ro -t auto /dev/block/mapper/$block /$block 2>/dev/null
+          blockdev --setrw /dev/block/mapper/$block 2>/dev/null
+          mount -o rw,remount -t auto /dev/block/mapper/$block /$block 2>/dev/null
+        else
+          mount -o ro -t auto /$block 2>/dev/null
+          mount -o rw,remount -t auto /$block 2>/dev/null
+        fi
+      fi
+    done
+  fi
+}
+
+unmount_extras() {
+  umount /product /system_ext /vendor 2>/dev/null
+}
+
 if [ -z $backuptool_ab ]; then
   SYS=$S
   TMP=/tmp
@@ -575,6 +598,7 @@ case "$1" in
     list_files | while read -r FILE DUMMY; do
       backup_file "$S"/"$FILE"
     done
+    unmount_extras
   ;;
   restore)
     list_files | while read -r FILE REPLACEMENT; do
@@ -584,12 +608,13 @@ case "$1" in
     done
   ;;
   pre-backup)
-    # Stub
+    mount_extras
   ;;
   post-backup)
     # Stub
   ;;
   pre-restore)
+    mount_extras
     # Remove AOSP apps
     for f in $rm_list; do
       rm -rf $SYS/$f
@@ -607,6 +632,7 @@ case "$1" in
       chmod 644 "$SYS/$i"
       chmod 755 "$(dirname "$SYS/$i")"
     done
+    unmount_extras
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
@@ -622,6 +648,29 @@ make_addon_full_29() {
 #
 . /tmp/backuptool.functions
 
+mount_extras() {
+  local ab_device=$(getprop ro.build.ab_update)
+  local dynamic_partition=$(getprop ro.boot.dynamic_partitions)
+  if [ -z "$ab_device" ]; then
+    for block in product system_ext vendor; do
+      if [ -e /$block ]; then
+        if [ "$dynamic_partition" = "true" ]; then
+          mount -o ro -t auto /dev/block/mapper/$block /$block 2>/dev/null
+          blockdev --setrw /dev/block/mapper/$block 2>/dev/null
+          mount -o rw,remount -t auto /dev/block/mapper/$block /$block 2>/dev/null
+        else
+          mount -o ro -t auto /$block 2>/dev/null
+          mount -o rw,remount -t auto /$block 2>/dev/null
+        fi
+      fi
+    done
+  fi
+}
+
+unmount_extras() {
+  umount /product /system_ext /vendor 2>/dev/null
+}
+
 if [ -z $backuptool_ab ]; then
   SYS=$S
   TMP=/tmp
@@ -826,6 +875,7 @@ case "$1" in
     list_files | while read -r FILE DUMMY; do
       backup_file "$S"/"$FILE"
     done
+    unmount_extras
   ;;
   restore)
     list_files | while read -r FILE REPLACEMENT; do
@@ -835,12 +885,13 @@ case "$1" in
     done
   ;;
   pre-backup)
-    # Stub
+    mount_extras
   ;;
   post-backup)
     # Stub
   ;;
   pre-restore)
+    mount_extras
     # Remove AOSP apps
     for f in $rm_list; do
       rm -rf $SYS/$f
@@ -859,6 +910,7 @@ case "$1" in
       chmod 644 "$SYS/$i"
       chmod 755 "$(dirname "$SYS/$i")"
     done
+    unmount_extras
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
@@ -873,6 +925,29 @@ make_addon_basic_30() {
 # /system/addon.d/69-flame.sh
 #
 . /tmp/backuptool.functions
+
+mount_extras() {
+  local ab_device=$(getprop ro.build.ab_update)
+  local dynamic_partition=$(getprop ro.boot.dynamic_partitions)
+  if [ -z "$ab_device" ]; then
+    for block in product system_ext vendor; do
+      if [ -e /$block ]; then
+        if [ "$dynamic_partition" = "true" ]; then
+          mount -o ro -t auto /dev/block/mapper/$block /$block 2>/dev/null
+          blockdev --setrw /dev/block/mapper/$block 2>/dev/null
+          mount -o rw,remount -t auto /dev/block/mapper/$block /$block 2>/dev/null
+        else
+          mount -o ro -t auto /$block 2>/dev/null
+          mount -o rw,remount -t auto /$block 2>/dev/null
+        fi
+      fi
+    done
+  fi
+}
+
+unmount_extras() {
+  umount /product /system_ext /vendor 2>/dev/null
+}
 
 if [ -z $backuptool_ab ]; then
   SYS=$S
@@ -953,6 +1028,7 @@ case "$1" in
     list_files | while read -r FILE DUMMY; do
       backup_file "$S"/"$FILE"
     done
+    unmount_extras
   ;;
   restore)
     list_files | while read -r FILE REPLACEMENT; do
@@ -962,12 +1038,13 @@ case "$1" in
     done
   ;;
   pre-backup)
-    # Stub
+    mount_extras
   ;;
   post-backup)
     # Stub
   ;;
   pre-restore)
+    mount_extras
     # Remove AOSP apps
     for f in $rm_list; do
       rm -rf $SYS/$f
@@ -986,6 +1063,7 @@ case "$1" in
       chmod 644 "$SYS/$i"
       chmod 755 "$(dirname "$SYS/$i")"
     done
+    unmount_extras
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
@@ -1000,6 +1078,29 @@ make_addon_full_30() {
 # /system/addon.d/69-flame.sh
 #
 . /tmp/backuptool.functions
+
+mount_extras() {
+  local ab_device=$(getprop ro.build.ab_update)
+  local dynamic_partition=$(getprop ro.boot.dynamic_partitions)
+  if [ -z "$ab_device" ]; then
+    for block in product system_ext vendor; do
+      if [ -e /$block ]; then
+        if [ "$dynamic_partition" = "true" ]; then
+          mount -o ro -t auto /dev/block/mapper/$block /$block 2>/dev/null
+          blockdev --setrw /dev/block/mapper/$block 2>/dev/null
+          mount -o rw,remount -t auto /dev/block/mapper/$block /$block 2>/dev/null
+        else
+          mount -o ro -t auto /$block 2>/dev/null
+          mount -o rw,remount -t auto /$block 2>/dev/null
+        fi
+      fi
+    done
+  fi
+}
+
+unmount_extras() {
+  umount /product /system_ext /vendor 2>/dev/null
+}
 
 if [ -z $backuptool_ab ]; then
   SYS=$S
@@ -1205,6 +1306,7 @@ case "$1" in
     list_files | while read -r FILE DUMMY; do
       backup_file "$S"/"$FILE"
     done
+    unmount_extras
   ;;
   restore)
     list_files | while read -r FILE REPLACEMENT; do
@@ -1214,12 +1316,13 @@ case "$1" in
     done
   ;;
   pre-backup)
-    # Stub
+    mount_extras
   ;;
   post-backup)
     # Stub
   ;;
   pre-restore)
+    mount_extras
     # Remove AOSP apps
     for f in $rm_list; do
       rm -rf $SYS/$f
@@ -1239,6 +1342,7 @@ case "$1" in
       chmod 644 "$SYS/$i"
       chmod 755 "$(dirname "$SYS/$i")"
     done
+    unmount_extras
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
