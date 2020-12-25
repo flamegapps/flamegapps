@@ -907,7 +907,7 @@ if [ -e $SYSTEM/priv-app/GoogleDialer/GoogleDialer.apk ]; then
 fi
 
 # Install addon.d script
-if [ -d "$SYSTEM/addon.d" ]; then
+if [ -d $SYSTEM/addon.d ]; then
   rm -rf $SYSTEM/addon.d/69-flame.sh
   cp -f $TMP/addon.d.sh $SYSTEM/addon.d/69-flame.sh
   chcon -h u:object_r:system_file:s0 "$SYSTEM/addon.d/69-flame.sh"
