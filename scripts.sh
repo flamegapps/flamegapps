@@ -232,6 +232,7 @@ case "$1" in
       chmod 644 "$SYS/$i"
       chmod 755 "$(dirname "$SYS/$i")"
     done
+    chmod 600 $SYS/build.prop
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
@@ -481,6 +482,7 @@ case "$1" in
       chmod 644 "$SYS/$i"
       chmod 755 "$(dirname "$SYS/$i")"
     done
+    chmod 600 $SYS/build.prop
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
@@ -633,6 +635,7 @@ case "$1" in
       chmod 755 "$(dirname "$SYS/$i")"
     done
     unmount_extras
+    chmod 600 $SYS/build.prop
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
@@ -911,6 +914,7 @@ case "$1" in
       chmod 755 "$(dirname "$SYS/$i")"
     done
     unmount_extras
+    chmod 600 $SYS/build.prop
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
@@ -1064,6 +1068,7 @@ case "$1" in
       chmod 755 "$(dirname "$SYS/$i")"
     done
     unmount_extras
+    chmod 600 $SYS/build.prop
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
@@ -1343,6 +1348,7 @@ case "$1" in
       chmod 755 "$(dirname "$SYS/$i")"
     done
     unmount_extras
+    chmod 600 $SYS/build.prop
   ;;
 esac
 ' > $ZIP_DIR/addon.d.sh
