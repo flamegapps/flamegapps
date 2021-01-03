@@ -177,13 +177,6 @@ mk_wellbeing() {
   compress_gapps "DigitalWellbeing.tar.xz"
 }
 
-mk_location_history() {
-  echo ">>> Compressing GoogleLocationHistory"
-  make_app
-  copy_file $SDK_ALL/app/GoogleLocationHistory $GAPPS_DIR/system/app/
-  compress_gapps "GoogleLocationHistory.tar.xz"
-}
-
 mk_sound_picker() {
   echo ">>> Compressing SoundPickerPrebuilt"
   make_app

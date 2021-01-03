@@ -135,7 +135,6 @@ list_files() {
 cat <<EOF
 app/GoogleExtShared/GoogleExtShared.apk
 app/GoogleContactsSyncAdapter/GoogleContactsSyncAdapter.apk
-app/GoogleLocationHistory/GoogleLocationHistory.apk
 app/SoundPickerPrebuilt/SoundPickerPrebuilt.apk
 app/MarkupGoogle/MarkupGoogle.apk
 app/GoogleCalendarSyncAdapter/GoogleCalendarSyncAdapter.apk
@@ -269,7 +268,6 @@ app/Photos/Photos.apk
 app/PrebuiltBugle/PrebuiltBugle.apk
 app/PrebuiltDeskClockGoogle/PrebuiltDeskClockGoogle.apk
 app/SoundPickerPrebuilt/SoundPickerPrebuilt.apk
-app/GoogleLocationHistory/GoogleLocationHistory.apk
 app/WallpaperPickerGooglePrebuilt/WallpaperPickerGooglePrebuilt.apk
 priv-app/GoogleExtServices/GoogleExtServices.apk
 priv-app/CarrierSetup/CarrierSetup.apk
@@ -534,7 +532,6 @@ cat <<EOF
 app/GoogleExtShared/GoogleExtShared.apk
 app/GoogleContactsSyncAdapter/GoogleContactsSyncAdapter.apk
 app/GoogleCalendarSyncAdapter/GoogleCalendarSyncAdapter.apk
-app/GoogleLocationHistory/GoogleLocationHistory.apk
 app/SoundPickerPrebuilt/SoundPickerPrebuilt.apk
 app/MarkupGoogle/MarkupGoogle.apk
 priv-app/GoogleExtServices/GoogleExtServices.apk
@@ -690,7 +687,6 @@ app/GoogleContactsSyncAdapter/GoogleContactsSyncAdapter.apk
 app/GoogleCalendarSyncAdapter/GoogleCalendarSyncAdapter.apk
 app/GoogleExtShared/GoogleExtShared.apk
 app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk
-app/GoogleLocationHistory/GoogleLocationHistory.apk
 app/MarkupGoogle/MarkupGoogle.apk
 app/Photos/Photos.apk
 app/PrebuiltBugle/PrebuiltBugle.apk
@@ -966,7 +962,6 @@ cat <<EOF
 app/GoogleExtShared/GoogleExtShared.apk
 app/GoogleContactsSyncAdapter/GoogleContactsSyncAdapter.apk
 app/GoogleCalendarSyncAdapter/GoogleCalendarSyncAdapter.apk
-app/GoogleLocationHistory/GoogleLocationHistory.apk
 app/SoundPickerPrebuilt/SoundPickerPrebuilt.apk
 app/MarkupGoogle/MarkupGoogle.apk
 priv-app/GoogleExtServices/GoogleExtServices.apk
@@ -1123,7 +1118,6 @@ app/GoogleContactsSyncAdapter/GoogleContactsSyncAdapter.apk
 app/GoogleCalendarSyncAdapter/GoogleCalendarSyncAdapter.apk
 app/GoogleExtShared/GoogleExtShared.apk
 app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk
-app/GoogleLocationHistory/GoogleLocationHistory.apk
 app/MarkupGoogle/MarkupGoogle.apk
 app/Photos/Photos.apk
 app/PrebuiltBugle/PrebuiltBugle.apk

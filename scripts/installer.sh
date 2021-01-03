@@ -18,7 +18,6 @@
 gapps_list_basic="
 CalendarSync
 DigitalWellbeing
-GoogleLocationHistory
 MarkupGoogle
 SetupWizard
 SoundPickerGoogle"
@@ -36,7 +35,6 @@ GoogleDialer
 GoogleMessages
 GoogleKeyboard
 GooglePhotos
-GoogleLocationHistory
 MarkupGoogle
 SetupWizard
 SoundPickerGoogle
@@ -48,6 +46,7 @@ app/ExtShared
 app/FaceLock
 app/GoogleExtShared
 app/GoogleContactSyncAdapter
+app/GoogleLocationHistory
 priv-app/ExtServices
 priv-app/AndroidPlatformServices
 priv-app/GoogleServicesFramework
@@ -128,6 +127,7 @@ app/ViaBrowser
 app/ViaBrowserPrebuilt
 app/LatinIME
 app/LatinIMEPrebuilt
+app/GoogleLocationHistory
 priv-app/AudioFX
 priv-app/ExtServices
 priv-app/Browser

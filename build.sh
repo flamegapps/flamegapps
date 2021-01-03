@@ -59,7 +59,6 @@ make_gapps() {
     mk_cal_sync
     mk_wellbeing
     mk_sound_picker
-    mk_location_history
     make_addon_basic_$SDK
   else
     mk_core_$SDK
@@ -68,7 +67,6 @@ make_gapps() {
     mk_cal_sync
     mk_wellbeing
     mk_sound_picker
-    mk_location_history
     mk_health_service
     mk_calculator
     mk_calendar
