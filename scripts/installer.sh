@@ -18,6 +18,7 @@
 gapps_list_basic="
 CalendarSync
 DigitalWellbeing
+GooglePackageInstaller
 MarkupGoogle
 SetupWizard
 SoundPickerGoogle"
@@ -34,6 +35,7 @@ GoogleContacts
 GoogleDialer
 GoogleMessages
 GoogleKeyboard
+GooglePackageInstaller
 GooglePhotos
 MarkupGoogle
 SetupWizard
@@ -50,6 +52,8 @@ app/GoogleLocationHistory
 priv-app/ExtServices
 priv-app/AndroidPlatformServices
 priv-app/GoogleServicesFramework
+priv-app/PackageInstaller
+priv-app/GooglePackageInstaller
 priv-app/GmsCoreSetupPrebuilt
 priv-app/GmsCore
 priv-app/PrebuiltGmsCore
@@ -158,6 +162,8 @@ priv-app/Gallery2
 priv-app/Gallery3d
 priv-app/GalleryGo
 priv-app/GalleryGoPrebuilt
+priv-app/PackageInstaller
+priv-app/GooglePackageInstaller
 priv-app/PrebuiltGalleryGo
 priv-app/SimpleGallery
 priv-app/Photos

@@ -163,6 +163,27 @@ mk_setup_30() {
   compress_gapps "SetupWizard.tar.xz"
 }
 
+mk_package_installer_28() {
+  echo ">>> Compressing GooglePackageInstaller"
+  make_priv_app
+  copy_file $SDK_28/priv-app/GooglePackageInstaller $GAPPS_DIR/system/priv-app/
+  compress_gapps "GooglePackageInstaller.tar.xz" 
+}
+
+mk_package_installer_29() {
+  echo ">>> Compressing GooglePackageInstaller"
+  make_priv_app
+  copy_file $SDK_29/priv-app/GooglePackageInstaller $GAPPS_DIR/system/priv-app/
+  compress_gapps "GooglePackageInstaller.tar.xz" 
+}
+
+mk_package_installer_30() {
+  echo ">>> Compressing GooglePackageInstaller"
+  make_priv_app
+  copy_file $SDK_30/priv-app/GooglePackageInstaller $GAPPS_DIR/system/priv-app/
+  compress_gapps "GooglePackageInstaller.tar.xz" 
+}
+
 mk_cal_sync() {
   echo ">>> Compressing CalendarSync"
   make_app

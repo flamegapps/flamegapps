@@ -7,7 +7,7 @@
 #
 # The FlameGApps scripts are free software, you can redistribute and/or modify them.
 #
-# These scripts are distributed in the hope that they'll will be useful, but WITHOUT ANY WARRANTY.
+# These scripts are distributed in the hope that they will be useful, but WITHOUT ANY WARRANTY.
 #
 ###########################################
 #
@@ -146,6 +146,7 @@ priv-app/GoogleBackupTransport/GoogleBackupTransport.apk
 priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
+priv-app/GooglePackageInstaller/GooglePackageInstaller.apk
 priv-app/Phonesky/Phonesky.apk
 priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
@@ -184,6 +185,8 @@ priv-app/AndroidPlatformServices
 priv-app/GoogleServicesFramework
 priv-app/GmsCoreSetupPrebuilt
 priv-app/GmsCore
+priv-app/PackageInstaller
+priv-app/GooglePackageInstaller
 priv-app/PrebuiltGmsCore
 priv-app/PrebuiltGmsCorePi
 priv-app/PrebuiltGmsCoreQt
@@ -277,6 +280,7 @@ priv-app/GoogleBackupTransport/GoogleBackupTransport.apk
 priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
+priv-app/GooglePackageInstaller/GooglePackageInstaller.apk
 priv-app/Phonesky/Phonesky.apk
 priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
@@ -433,6 +437,8 @@ priv-app/WallpaperGooglePrebuilt
 priv-app/DeviceHealthService
 priv-app/AndroidPlatformServices
 priv-app/LatinIMEGooglePrebuilt
+priv-app/PackageInstaller
+priv-app/GooglePackageInstaller
 app/Snap
 app/Camera2
 app/SimpleCamera
@@ -542,6 +548,7 @@ priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleBackupTransport/GoogleBackupTransport.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
+priv-app/GooglePackageInstaller/GooglePackageInstaller.apk
 priv-app/Phonesky/Phonesky.apk
 priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
@@ -581,6 +588,8 @@ priv-app/AndroidPlatformServices
 priv-app/GoogleServicesFramework
 priv-app/GmsCoreSetupPrebuilt
 priv-app/GmsCore
+priv-app/PackageInstaller
+priv-app/GooglePackageInstaller
 priv-app/PrebuiltGmsCore
 priv-app/PrebuiltGmsCorePi
 priv-app/PrebuiltGmsCoreQt
@@ -701,6 +710,7 @@ priv-app/GoogleBackupTransport/GoogleBackupTransport.apk
 priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
+priv-app/GooglePackageInstaller/GooglePackageInstaller.apk
 priv-app/Phonesky/Phonesky.apk
 priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
@@ -859,6 +869,8 @@ priv-app/WallpaperGooglePrebuilt
 priv-app/DeviceHealthService
 priv-app/AndroidPlatformServices
 priv-app/LatinIMEGooglePrebuilt
+priv-app/PackageInstaller
+priv-app/GooglePackageInstaller
 app/Snap
 app/Camera2
 app/SimpleCamera
@@ -972,6 +984,7 @@ priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleBackupTransport/GoogleBackupTransport.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
+priv-app/GooglePackageInstaller/GooglePackageInstaller.apk
 priv-app/Phonesky/Phonesky.apk
 priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
@@ -1011,6 +1024,8 @@ priv-app/AndroidPlatformServices
 priv-app/GoogleServicesFramework
 priv-app/GmsCoreSetupPrebuilt
 priv-app/GmsCore
+priv-app/PackageInstaller
+priv-app/GooglePackageInstaller
 priv-app/PrebuiltGmsCore
 priv-app/PrebuiltGmsCorePi
 priv-app/PrebuiltGmsCoreQt
@@ -1132,6 +1147,7 @@ priv-app/GoogleBackupTransport/GoogleBackupTransport.apk
 priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk
 priv-app/GoogleRestore/GoogleRestore.apk
 priv-app/GoogleServicesFramework/GoogleServicesFramework.apk
+priv-app/GooglePackageInstaller/GooglePackageInstaller.apk
 priv-app/Phonesky/Phonesky.apk
 priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk
 priv-app/SetupWizard/SetupWizard.apk
@@ -1290,6 +1306,8 @@ priv-app/WallpaperGooglePrebuilt
 priv-app/DeviceHealthService
 priv-app/AndroidPlatformServices
 priv-app/LatinIMEGooglePrebuilt
+priv-app/PackageInstaller
+priv-app/GooglePackageInstaller
 app/Snap
 app/Camera2
 app/SimpleCamera
