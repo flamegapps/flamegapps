@@ -110,10 +110,6 @@ app/RevengeMessages
 app/QKSMS
 app/Email
 app/Email2
-app/Gmail
-app/GmailPrebuilt
-app/Maps
-app/MapsPrebuilt
 app/Music
 app/MusicPrebuilt
 app/Music2
@@ -184,15 +180,9 @@ priv-app/Calendar
 priv-app/Calculator
 priv-app/Hangouts
 priv-app/Messaging
-priv-app/Gmail
-priv-app/GmailPrebuilt
 priv-app/Email
 priv-app/Email2
 priv-app/Eleven
-priv-app/Maps
-priv-app/MapsPrebuilt
-priv-app/GoogleMaps
-priv-app/GoogleMapsPrebuilt
 priv-app/MarkupGoogle
 priv-app/MarkupGooglePrebuilt
 priv-app/PrebuiltDeskClock
