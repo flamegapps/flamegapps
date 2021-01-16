@@ -52,7 +52,6 @@ app/GoogleLocationHistory
 priv-app/ExtServices
 priv-app/AndroidPlatformServices
 priv-app/GoogleServicesFramework
-priv-app/PackageInstaller
 priv-app/GooglePackageInstaller
 priv-app/GmsCoreSetupPrebuilt
 priv-app/GmsCore
@@ -82,9 +81,6 @@ app/Calendar
 app/CalendarPrebuilt
 app/SimpleCalendar
 app/Eleven
-app/message
-app/messages
-app/Messages
 app/MarkupGoogle
 app/MarkupPrebuilt
 app/MarkupGooglePrebuilt
@@ -93,7 +89,6 @@ app/Hangouts
 app/SoundPicker
 app/SoundPickerPrebuilt
 app/PrebuiltSoundPicker
-app/Contacts
 app/ChromePublic
 app/Photos
 app/PhotosPrebuilt
@@ -103,11 +98,6 @@ app/GalleryGo
 app/GalleryGoPrebuilt
 app/CalculatorGooglePrebuilt
 app/CalendarGooglePrebuilt
-app/Messaging
-app/Messenger
-app/messaging
-app/RevengeMessages
-app/QKSMS
 app/Email
 app/Email2
 app/Music
@@ -125,8 +115,6 @@ app/Via
 app/ViaPrebuilt
 app/ViaBrowser
 app/ViaBrowserPrebuilt
-app/LatinIME
-app/LatinIMEPrebuilt
 app/GoogleLocationHistory
 priv-app/AudioFX
 priv-app/ExtServices
@@ -138,7 +126,6 @@ priv-app/Via
 priv-app/ViaPrebuilt
 priv-app/ViaBrowser
 priv-app/ViaBrowserPrebuilt
-priv-app/LatinIME
 priv-app/GoogleServicesFramework
 priv-app/GmsCore
 priv-app/GmsCorePrebuilt
@@ -158,13 +145,10 @@ priv-app/Gallery2
 priv-app/Gallery3d
 priv-app/GalleryGo
 priv-app/GalleryGoPrebuilt
-priv-app/PackageInstaller
 priv-app/GooglePackageInstaller
 priv-app/PrebuiltGalleryGo
 priv-app/SimpleGallery
 priv-app/Photos
-priv-app/Contact
-priv-app/Contacts
 priv-app/GoogleContacts
 priv-app/GoogleDialer
 priv-app/Music
@@ -179,7 +163,6 @@ priv-app/Clock
 priv-app/Calendar
 priv-app/Calculator
 priv-app/Hangouts
-priv-app/Messaging
 priv-app/Email
 priv-app/Email2
 priv-app/Eleven
@@ -207,6 +190,46 @@ app/SimpleCamera
 priv-app/Snap
 priv-app/Camera2
 priv-app/SimpleCamera"
+
+stock_messages="
+app/message
+app/messages
+app/Messages
+app/Messaging
+app/Messenger
+app/messaging
+app/RevengeMessages
+app/QKSMS
+priv-app/messaging
+priv-app/Messaging"
+
+provision="
+app/provision
+app/Provision
+priv-app/provision
+priv-app/Provision"
+
+lineage_setup="
+priv-app/LineageSetupWizard"
+
+aosp_dialer="
+app/Dialer
+priv-app/Dialer"
+
+aosp_contacts="
+app/Contact
+app/Contacts
+priv-app/Contact
+priv-app/Contacts"
+
+aosp_keyboard="
+app/LatinIME
+app/LatinIMEPrebuilt
+priv-app/LatinIME
+priv-app/LatinIMEPrebuilt"
+
+aosp_packageinstaller="
+priv-app/PackageInstaller"
 
 ui_print() {
   echo "ui_print $1
@@ -244,9 +267,10 @@ clean_up() {
   rm -rf /tmp/flamegapps
   rm -rf /tmp/config.prop
   rm -rf /tmp/flame.prop
-  rm -rf /tmp/addon.d.sh
   rm -rf /tmp/tar_gapps
   rm -rf /tmp/unzip_dir
+  rm -rf $backup_script
+  rm -rf $temp_backup_script
 }
 
 path_info() {
@@ -492,6 +516,8 @@ zip_dir="$(dirname "$ZIPFILE")"
 log_dir="$TMP/flamegapps/logs"
 flame_log="$log_dir/installation_log.txt"
 build_info="$log_dir/build_info.prop"
+backup_script="$TMP/backup_script.sh"
+temp_backup_script="$TMP/temp_backup_script.sh"
 mkdir -p $UNZIP_FOLDER
 mkdir -p $log_dir
 space_before
@@ -620,6 +646,21 @@ else
   abort
 fi
 
+check_gapps_config() {
+  if [ -e $zip_dir/flamegapps-config.txt ] || [ -e /sdcard/flamegapps-config.txt ]; then
+    ui_print "- GApps config detected"
+    ui_print " "
+    for p in $zip_dir /sdcard; do
+      if [ -e $p/flamegapps-config.txt ] && [ ! -e $TMP/config.prop ]; then
+        cp -f $p/flamegapps-config.txt $TMP/config.prop
+        cp -f $TMP/config.prop $log_dir/config.prop
+        chmod 0644 $TMP/config.prop
+        gapps_config="true"
+      fi
+    done
+  fi
+}
+
 install_core() {
   set_progress 0.50
   ui_print "- Installing Core GApps"
@@ -632,6 +673,7 @@ install_core() {
     install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
     chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
     chmod 0644 "$SYSTEM/${file}"
+    backup_file_list="$backup_file_list\n${file}"
   done
   for dir in $dir_list; do
     chcon -h u:object_r:system_file:s0 "$SYSTEM/${dir}"
@@ -644,22 +686,35 @@ install_core() {
 install_gapps() {
   set_progress 0.70
   for g in $gapps_list; do
-    ui_print "- Installing $g"
-    unzip -o "$ZIPFILE" "tar_gapps/$g.tar.xz" -d $TMP
-    tar -xf "$GAPPS_DIR/$g.tar.xz" -C $UNZIP_FOLDER
-    rm -rf $GAPPS_DIR/$g.tar.xz
-    file_list="$(find "$EX_SYSTEM/" -mindepth 1 -type f | cut -d/ -f5-)"
-    dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
-    for file in $file_list; do
-      install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
-      chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
-      chmod 0644 "$SYSTEM/${file}"
-    done
-    for dir in $dir_list; do
-      chcon -h u:object_r:system_file:s0 "$SYSTEM/${dir}"
-      chmod 0755 "$SYSTEM/${dir}"
-    done
-    rm -rf $UNZIP_FOLDER/*
+    local gapps=""
+    if [ "$gapps_config" = "true" ]; then
+      if [ "$(get_file_prop $TMP/config.prop "$g")" -eq "1" ]; then
+        gapps="$g"
+      else
+        ui_print "- Skipping $g"
+      fi
+    else
+      gapps="$g"
+    fi
+    if [ -n "$gapps" ]; then
+      ui_print "- Installing $gapps"
+      unzip -o "$ZIPFILE" "tar_gapps/$gapps.tar.xz" -d $TMP
+      tar -xf "$GAPPS_DIR/$gapps.tar.xz" -C $UNZIP_FOLDER
+      rm -rf $GAPPS_DIR/$gapps.tar.xz
+      file_list="$(find "$EX_SYSTEM/" -mindepth 1 -type f | cut -d/ -f5-)"
+      dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
+      for file in $file_list; do
+        install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
+        chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
+        chmod 0644 "$SYSTEM/${file}"
+        backup_file_list="$backup_file_list\n${file}"
+      done
+      for dir in $dir_list; do
+        chcon -h u:object_r:system_file:s0 "$SYSTEM/${dir}"
+        chmod 0755 "$SYSTEM/${dir}"
+      done
+      rm -rf $UNZIP_FOLDER/*
+    fi
   done
 }
 
@@ -671,186 +726,11 @@ remove_line() {
   fi
 }
 
-basic_config() {
-  set_progress 0.75
-  if [ -e "$zip_dir/flamegapps-config.txt" ] || [ -e "/sdcard/flamegapps-config.txt" ]; then
-     for p in $zip_dir /sdcard; do
-      if [ -e $p/flamegapps-config.txt ] && [ ! -e $TMP/config.prop ]; then
-        cp -f $p/flamegapps-config.txt $TMP/config.prop
-        chmod 0644 "$TMP/config.prop"
-      fi
-    done
-    ui_print " "
-    ui_print "- Config detected in successfully"
-    ui_print " "
-    sleep 1
-    rm_setupwizard=`get_file_prop $TMP/config.prop "ro.basic.remove.setupwizard"`
-    rm_wellbeing=`get_file_prop $TMP/config.prop "ro.basic.remove.wellbeing"`
-    rm_sounds=`get_file_prop $TMP/config.prop "ro.basic.remove.sounds"`
-    rm_markup=`get_file_prop $TMP/config.prop "ro.basic.remove.markup"`
-    if [ "$rm_setupwizard" = "1" ]; then
-      ui_print "- Removing SetupWizard"
-      sleep 0.3
-      rm -rf $SYSTEM/priv-app/GoogleRestore
-      rm -rf $SYSTEM/priv-app/GoogleBackupTransport
-      rm -rf $SYSTEM/priv-app/AndroidMigratePrebuilt
-      rm -rf $SYSTEM/priv-app/SetupWizard
-      remove_line $TMP/addon.d.sh "priv-app/GoogleRestore/GoogleRestore.apk"
-      remove_line $TMP/addon.d.sh "priv-app/GoogleBackupTransport/GoogleBackupTransport.apk"
-      remove_line $TMP/addon.d.sh "priv-app/SetupWizard/SetupWizard.apk"
-      remove_line $TMP/addon.d.sh "priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk"
-      remove_line $TMP/addon.d.sh "priv-app/Provision"
-      remove_line $TMP/addon.d.sh "priv-app/LineageSetupWizard"
-    fi
-    if [ "$rm_sounds" = "1" ]; then
-      ui_print "- Removing GoogleSoundPicker"
-      sleep 0.3
-      rm -rf $SYSTEM/app/SoundPickerPrebuilt
-      remove_line $TMP/addon.d.sh "app/SoundPickerPrebuilt/SoundPickerPrebuilt.apk"
-    fi
-    if [ "$rm_markup" = "1" ]; then
-      ui_print "- Removing GoogleMarkup"
-      sleep 0.3
-      rm -rf $SYSTEM/app/MarkupGoogle
-      rm -rf $SYSTEM/app/lib64/libsketchology_native.so
-      remove_line $TMP/addon.d.sh "app/MarkupGoogle/MarkupGoogle.apk"
-      remove_line $TMP/addon.d.sh "app/MarkupGoogle/lib/arm64/libsketchology_native.so"
-    fi
-    if [ "$rm_wellbeing" = "1" ]; then
-      ui_print "- Removing DigitalWellbeing"
-      sleep 0.3
-      rm -rf $SYSTEM/priv-app/WellbeingPrebuilt
-      remove_line $TMP/addon.d.sh "priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk"
-    fi
-  fi
-}
-
-full_config() {
-  set_progress 0.75
-  if [ -e "$zip_dir/flamegapps-config.txt" ] || [ -e "/sdcard/flamegapps-config.txt" ]; then
-    for p in $zip_dir /sdcard; do
-      if [ -e $p/flamegapps-config.txt ] && [ ! -e $TMP/config.prop ]; then
-        cp -f $p/flamegapps-config.txt $TMP/config.prop
-        chmod 0644 $TMP/config.prop
-      fi
-    done
-    cp -f $TMP/config.prop $log_dir/config.prop
-    ui_print " "
-    ui_print "- Config detected in successfully"
-    ui_print " "
-    sleep 1
-    rm_setupwizard=`get_file_prop $TMP/config.prop "ro.full.remove.setupwizard"`
-    rm_wellbeing=`get_file_prop $TMP/config.prop "ro.full.remove.wellbeing"`
-    rm_photos=`get_file_prop $TMP/config.prop "ro.full.remove.photos"`
-    rm_calendar=`get_file_prop $TMP/config.prop "ro.full.remove.calendar"`
-    rm_calculator=`get_file_prop $TMP/config.prop "ro.full.remove.calculator"`
-    rm_sounds=`get_file_prop $TMP/config.prop "ro.full.remove.sounds"`
-    rm_turbo=`get_file_prop $TMP/config.prop "ro.full.remove.turbo"`
-    rm_wallpapers=`get_file_prop $TMP/config.prop "ro.full.remove.wallpapers"`
-    rm_gdialer=`get_file_prop $TMP/config.prop "ro.full.remove.gdialer"`
-    rm_markup=`get_file_prop $TMP/config.prop "ro.full.remove.markup"`
-    keep_snap=`get_file_prop $TMP/config.prop "ro.full.keep.snap"`
-    if [ "$rm_setupwizard" = "1" ]; then
-      ui_print "- Removing SetupWizard"
-      sleep 0.3
-      rm -rf $SYSTEM/priv-app/GoogleRestore
-      rm -rf $SYSTEM/priv-app/GoogleBackupTransport
-      rm -rf $SYSTEM/priv-app/AndroidMigratePrebuilt
-      rm -rf $SYSTEM/priv-app/SetupWizard
-      remove_line $TMP/addon.d.sh "priv-app/GoogleRestore/GoogleRestore.apk"
-      remove_line $TMP/addon.d.sh "priv-app/GoogleBackupTransport/GoogleBackupTransport.apk"
-      remove_line $TMP/addon.d.sh "priv-app/SetupWizard/SetupWizard.apk"
-      remove_line $TMP/addon.d.sh "priv-app/AndroidMigratePrebuilt/AndroidMigratePrebuilt.apk"
-      remove_line $TMP/addon.d.sh "priv-app/Provision"
-      remove_line $TMP/addon.d.sh "priv-app/LineageSetupWizard"
-    fi
-    if [ "$rm_wellbeing" = "1" ]; then
-      ui_print "- Removing DigitalWellbeing"
-      sleep 0.3
-      rm -rf $SYSTEM/priv-app/WellbeingPrebuilt
-      remove_line $TMP/addon.d.sh "priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk"
-    fi
-    if [ "$rm_gdialer" = "1" ]; then
-      ui_print "- Removing GoogleDialer"
-      sleep 0.3
-      rm -rf $SYSTEM/priv-app/GoogleDialer
-      remove_line $TMP/addon.d.sh "priv-app/GoogleDialer/GoogleDialer.apk"
-      remove_line $TMP/addon.d.sh "priv-app/Dialer"
-    fi
-    if [ "$rm_photos" = "1" ]; then
-      ui_print "- Removing GooglePhotos"
-      sleep 0.3
-      rm -rf $SYSTEM/app/Photos
-      remove_line $TMP/addon.d.sh "app/Photos/Photos.apk"
-    fi
-    if [ "$rm_calendar" = "1" ]; then
-      ui_print "- Removing GoogleCalendar"
-      sleep 0.3
-      rm -rf $SYSTEM/app/CalendarGooglePrebuilt
-      remove_line $TMP/addon.d.sh "app/CalendarGooglePrebuilt/CalendarGooglePrebuilt.apk"
-    fi
-    if [ "$rm_calculator" = "1" ]; then
-      ui_print "- Removing GoogleCalculator"
-      sleep 0.3
-      rm -rf $SYSTEM/app/CalculatorGooglePrebuilt
-      remove_line $TMP/addon.d.sh "app/CalculatorGooglePrebuilt/CalculatorGooglePrebuilt.apk"
-    fi
-    if [ "$rm_sounds" = "1" ]; then
-      ui_print "- Removing GoogleSoundPicker"
-      sleep 0.3
-      rm -rf $SYSTEM/app/SoundPickerPrebuilt
-      remove_line $TMP/addon.d.sh "app/SoundPickerPrebuilt/SoundPickerPrebuilt.apk"
-    fi
-    if [ "$rm_markup" = "1" ]; then
-      ui_print "- Removing GoogleMarkup"
-      sleep 0.3
-      rm -rf $SYSTEM/app/MarkupGoogle
-      rm -rf $SYSTEM/app/lib64/libsketchology_native.so
-      remove_line $TMP/addon.d.sh "app/MarkupGoogle/MarkupGoogle.apk"
-      remove_line $TMP/addon.d.sh "app/MarkupGoogle/lib/arm64/libsketchology_native.so"
-    fi
-    if [ "$rm_turbo" = "1" ]; then
-      ui_print "- Removing DeviceHealthServices"
-      sleep 0.3
-      rm -rf $SYSTEM/priv-app/Turbo
-      remove_line $TMP/addon.d.sh "priv-app/Turbo/Turbo.apk"
-    fi
-    if [ "$rm_wallpapers" = "1" ]; then
-      ui_print "- Removing GoogleWallpaperPicker"
-      sleep 0.3
-      rm -rf $SYSTEM/app/WallpaperPickerGooglePrebuilt
-      remove_line $TMP/addon.d.sh "app/WallpaperPickerGooglePrebuilt/WallpaperPickerGooglePrebuilt.apk"
-    fi
-    if [ ! "$keep_snap" = "Y" ]; then
-      for f in $stock_camera; do
-        rm -rf $SYSTEM/$f
-        if [ $rom_sdk -gt 28 ]; then
-          rm -rf $SYSTEM/product/$f
-        fi
-        if [ $rom_sdk -gt 29 ]; then
-          rm -rf $SYSTEM/system_ext/$f
-        fi
-      done
-    else
-      for f in $stock_camera; do
-        remove_line $TMP/addon.d.sh "$f"
-      done
-    fi
-  else
-    for f in $stock_camera; do
-      rm -rf $SYSTEM/$f
-      if [ $rom_sdk -gt 28 ]; then
-        rm -rf $SYSTEM/product/$f
-      fi
-      if [ $rom_sdk -gt 29 ]; then
-        rm -rf $SYSTEM/system_ext/$f
-      fi
-    done
-  fi
-}
-
 # Ensure gapps list
 [ "$flame_edition" = "basic" ] && gapps_list="$gapps_list_basic" || gapps_list="$gapps_list_full"
+
+# Check for config
+check_gapps_config
 
 # Install core gapps files
 echo -e "\n- Installing core gapps files" >> $flame_log
@@ -860,10 +740,6 @@ install_core >> $flame_log
 echo -e "\n- Installing gapps files" >> $flame_log
 install_gapps >> $flame_log
 
-# Run debloater
-echo -e "\n- Debloating Device" >> $flame_log
-[ "$flame_edition" = "basic" ] && basic_config || full_config
-
 echo -e "\n                 Installation Finished            " >> $flame_log
 echo ----------------------------------------------------------------- >> $flame_log
 
@@ -871,43 +747,174 @@ sleep 0.5
 set_progress 0.80
 ui_print " "
 ui_print "- Performing other tasks"
-# Create lib symlinks
-if [ -e $SYSTEM/app/MarkupGoogle/MarkupGoogle.apk ]; then
-  install -d "$SYSTEM/app/MarkupGoogle/lib/arm64"
-  ln -sfn "/system/lib64/libsketchology_native.so" "/system/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+# Check for stock cam removal
+if [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.keep.snap")" -eq "1" ]; then
+  remove_camera="false"
+else
+  remove_camera="true"
+  for f in $stock_camera; do
+    rm -rf $SYSTEM/$f
+    if [ $rom_sdk -gt 28 ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ $rom_sdk -gt 29 ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
 fi
 
-if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
-  install -d "$SYSTEM/app/LatinIMEGooglePrebuilt/lib64/arm64"
-  ln -sfn "/system/lib64/libjni_latinimegoogle.so" "/system/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
+# Delete AOSP PackageInstaller if Google PackageInstaller is present
+if [ -e $SYSTEM/priv-app/GooglePackageInstaller/GooglePackageInstaller.apk ]; then
+  google_packageinstaller="true"
+  for f in $aosp_packageinstaller; do
+    rm -rf $SYSTEM/$f
+    if [ $rom_sdk -gt 28 ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ $rom_sdk -gt 29 ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
 fi
 
 # Delete provision and lineage setupwizard if Google SetupWizard is present
 if [ -e $SYSTEM/priv-app/SetupWizard/SetupWizard.apk ]; then
-  rm -rf $SYSTEM/priv-app/Provision
-  rm -rf $SYSTEM/priv-app/provision
-  rm -rf $SYSTEM/priv-app/LineageSetupWizard
-  if [ $rom_sdk -gt 28 ]; then
-    rm -rf $SYSTEM/product/priv-app/Provision
-    rm -rf $SYSTEM/product/priv-app/provision
-    rm -rf $SYSTEM/product/priv-app/LineageSetupWizard
-  fi
-  [ $rom_sdk -gt 29 ] && rm -rf $SYSTEM/system_ext/priv-app/Provision
+  google_setupwizard="true"
+  for f in $provision; do
+    rm -rf $SYSTEM/$f
+    if [ $rom_sdk -gt 28 ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ $rom_sdk -gt 29 ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
+  for f in $lineage_setup; do
+    rm -rf $SYSTEM/$f
+    if [ $rom_sdk -gt 28 ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ $rom_sdk -gt 29 ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
 fi
 
 # Delete AOSP Dialer if Google Dialer is present
 if [ -e $SYSTEM/priv-app/GoogleDialer/GoogleDialer.apk ]; then
-  rm -rf $SYSTEM/priv-app/Dialer
-  [ $rom_sdk -gt 28 ] && rm -rf $SYSTEM/product/priv-app/Dialer
-  [ $rom_sdk -gt 29 ] && rm -rf $SYSTEM/system_ext/priv-app/Dialer
+  google_dialer="true"
+  for f in $aosp_dialer; do
+    rm -rf $SYSTEM/$f
+    if [ $rom_sdk -gt 28 ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ $rom_sdk -gt 29 ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
+fi
+
+# Delete AOSP Contacts if Google Contacts is present
+if [ -e $SYSTEM/priv-app/GoogleContacts/GoogleContacts.apk ]; then
+  google_contacts="true"
+  for f in $aosp_contacts; do
+    rm -rf $SYSTEM/$f
+    if [ $rom_sdk -gt 28 ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ $rom_sdk -gt 29 ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
+fi
+
+# Delete AOSP/other Meassages if Google Messages is present
+if [ -e $SYSTEM/app/PrebuiltBugle/PrebuiltBugle.apk ]; then
+  google_messages="true"
+  for f in $stock_messages; do
+    rm -rf $SYSTEM/$f
+    if [ $rom_sdk -gt 28 ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ $rom_sdk -gt 29 ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
+fi
+
+# Delete AOSP Keyboard if Gboard is present
+if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
+  google_keyboard="true"
+  for f in $aosp_keyboard; do
+    rm -rf $SYSTEM/$f
+    if [ $rom_sdk -gt 28 ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ $rom_sdk -gt 29 ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
 fi
 
 # Install addon.d script
 if [ -d $SYSTEM/addon.d ]; then
   rm -rf $SYSTEM/addon.d/69-flame.sh
-  cp -f $TMP/addon.d.sh $SYSTEM/addon.d/69-flame.sh
+  echo '#!/sbin/sh
+#
+# ADDOND_VERSION=2
+#
+# /system/addon.d/69-flame.sh
+#
+. /tmp/backuptool.functions
+
+rm_list="' > $temp_backup_script
+  if [ "$remove_camera" = "true" ]; then
+    echo "$stock_camera" | sed '/^$/d' >> $temp_backup_script
+  fi
+  if [ "$google_packageinstaller" = "true" ]; then
+    echo "$aosp_packageinstaller" | sed '/^$/d' >> $temp_backup_script
+  fi
+  if [ "$google_setupwizard" = "true" ]; then
+    echo "$provision" | sed '/^$/d' >> $temp_backup_script
+    echo "$lineage_setup" | sed '/^$/d' >> $temp_backup_script
+  fi
+  if [ "$google_dialer" = "true" ]; then
+    echo "$aosp_dialer" | sed '/^$/d' >> $temp_backup_script
+  fi
+  if [ "$google_contacts" = "true" ]; then
+    echo "$aosp_contacts" | sed '/^$/d' >> $temp_backup_script
+  fi
+  if [ "$google_messages" = "true" ]; then
+    echo "$stock_messages" | sed '/^$/d' >> $temp_backup_script
+  fi
+  if [ "$google_keyboard" = "true" ]; then
+    echo "$aosp_keyboard" | sed '/^$/d' >> $temp_backup_script
+  fi
+  if [ "$flame_edition" = "basic" ]; then
+    echo -n "$rm_list_basic" | sed '/^$/d' >> $temp_backup_script
+  elif [ "$flame_edition" = "full" ]; then
+    echo -n "$rm_list_full" | sed '/^$/d' >> $temp_backup_script
+  fi
+  echo -e '"\n\nlist_files() {
+cat <<EOF' >> $temp_backup_script
+  echo -e "$backup_file_list" | sed '/^$/d' | sort >> $temp_backup_script
+  echo -e 'EOF
+}\n' >> $temp_backup_script
+  cat $temp_backup_script > $TMP/69-flame.sh
+  cat $backup_script >> $TMP/69-flame.sh
+  cp -f $TMP/69-flame.sh $SYSTEM/addon.d/69-flame.sh
   chcon -h u:object_r:system_file:s0 "$SYSTEM/addon.d/69-flame.sh"
   chmod 0755 "$SYSTEM/addon.d/69-flame.sh"
+fi
+
+# Create lib symlinks
+if [ -e $SYSTEM/app/MarkupGoogle/MarkupGoogle.apk ]; then
+  install -d "$SYSTEM/app/MarkupGoogle/lib/arm64"
+  ln -sfn "/system/lib64/libsketchology_native.so" "/system/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+fi
+if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
+  install -d "$SYSTEM/app/LatinIMEGooglePrebuilt/lib64/arm64"
+  ln -sfn "/system/lib64/libjni_latinimegoogle.so" "/system/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
 fi
 
 # Install flame.prop

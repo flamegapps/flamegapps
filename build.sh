@@ -41,6 +41,11 @@ create_dir() {
   mkdir $ZIP_DIR/tar_gapps
 }
 
+copy_backup_script() {
+  echo "--> Copying backup_script"
+  cp -f scripts/backup_script.sh $ZIP_DIR/backup_script.sh
+}
+
 copy_busybox() {
   echo "--> Copying busybox"
   cp -f tools/busybox-resources/busybox-arm $ZIP_DIR/busybox-arm
@@ -60,7 +65,6 @@ make_gapps() {
     mk_cal_sync
     mk_wellbeing
     mk_sound_picker
-    make_addon_basic_$SDK
   else
     mk_core_$SDK
     mk_markup_$SDK
@@ -79,7 +83,6 @@ make_gapps() {
     mk_gboard
     mk_photos
     mk_wall_picker_$SDK
-    make_addon_full_$SDK
   fi
 }
 
@@ -157,6 +160,7 @@ make_updater_script
 make_installer
 make_flame_prop
 make_gapps
+copy_backup_script
 copy_busybox
 copy_license
 create_zip
