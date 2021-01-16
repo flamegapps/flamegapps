@@ -718,14 +718,6 @@ install_gapps() {
   done
 }
 
-# remove_line <file> <line match string> by osm0sis @xda-developers
-remove_line() {
-  if grep -q "$2" $1; then
-    local line=$(grep -n "$2" $1 | head -n1 | cut -d: -f1);
-    sed -i "${line}d" $1;
-  fi
-}
-
 # Ensure gapps list
 [ "$flame_edition" = "basic" ] && gapps_list="$gapps_list_basic" || gapps_list="$gapps_list_full"
 
