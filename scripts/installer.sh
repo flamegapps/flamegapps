@@ -322,6 +322,19 @@ get_prop() {
   fi
 }
 
+remove_fd() {
+  local LIST="$1"
+  for f in $LIST; do
+    rm -rf $SYSTEM/$f
+    if [ "$rom_sdk" -gt "28" ]; then
+      rm -rf $SYSTEM/product/$f
+    fi
+    if [ "$rom_sdk" -gt "29" ]; then
+      rm -rf $SYSTEM/system_ext/$f
+    fi
+  done
+}
+
 abort() {
   sleep 1
   ui_print "- Aborting..."
@@ -604,36 +617,16 @@ fi
 
 # Remove pre-installed unnecessary system apps
 ui_print " "
+ui_print "- Removing unnecessary system apps"
+ui_print " "
+set_progress 0.30
+sleep 0.5
 if [ "$flame_edition" = "basic" ]; then
-  ui_print "- Removing unnecessary system apps"
-  ui_print " "
-  set_progress 0.30
-  sleep 0.5
+  remove_fd "$rm_list_basic"
   echo -e "\n- Removing basic list files" >> $flame_log
-  for f in $rm_list_basic; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
 elif [ "$flame_edition" = "full" ]; then
-  ui_print "- Removing unnecessary system apps"
-  ui_print " "
-  set_progress 0.30
-  sleep 0.5
+  remove_fd "$rm_list_full"
   echo -e "\n- Removing full list files" >> $flame_log
-  for f in $rm_list_full; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
 else
   ui_print "****************** WARNING *******************"
   ui_print " "
@@ -744,108 +737,44 @@ if [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.keep.
   remove_camera="false"
 else
   remove_camera="true"
-  for f in $stock_camera; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
+  remove_fd "$stock_camera"
 fi
 
 # Delete AOSP PackageInstaller if Google PackageInstaller is present
 if [ -e $SYSTEM/priv-app/GooglePackageInstaller/GooglePackageInstaller.apk ]; then
   google_packageinstaller="true"
-  for f in $aosp_packageinstaller; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
+  remove_fd "$aosp_packageinstaller"
 fi
 
 # Delete provision and lineage setupwizard if Google SetupWizard is present
 if [ -e $SYSTEM/priv-app/SetupWizard/SetupWizard.apk ]; then
   google_setupwizard="true"
-  for f in $provision; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
-  for f in $lineage_setup; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
+  remove_fd "$provision"
+  remove_fd "$lineage_setup"
 fi
 
 # Delete AOSP Dialer if Google Dialer is present
 if [ -e $SYSTEM/priv-app/GoogleDialer/GoogleDialer.apk ]; then
   google_dialer="true"
-  for f in $aosp_dialer; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
+  remove_fd "$aosp_dialer"
 fi
 
 # Delete AOSP Contacts if Google Contacts is present
 if [ -e $SYSTEM/priv-app/GoogleContacts/GoogleContacts.apk ]; then
   google_contacts="true"
-  for f in $aosp_contacts; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
+  remove_fd "$aosp_contacts"
 fi
 
 # Delete AOSP/other Meassages if Google Messages is present
 if [ -e $SYSTEM/app/PrebuiltBugle/PrebuiltBugle.apk ]; then
   google_messages="true"
-  for f in $stock_messages; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
+  remove_fd "$stock_messages"
 fi
 
 # Delete AOSP Keyboard if Gboard is present
 if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
   google_keyboard="true"
-  for f in $aosp_keyboard; do
-    rm -rf $SYSTEM/$f
-    if [ $rom_sdk -gt 28 ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
-    if [ $rom_sdk -gt 29 ]; then
-      rm -rf $SYSTEM/system_ext/$f
-    fi
-  done
+  remove_fd "$aosp_keyboard"
 fi
 
 # Install addon.d script
