@@ -851,7 +851,11 @@ fi
 # Install addon.d script
 if [ -d $SYSTEM/addon.d ]; then
   rm -rf $SYSTEM/addon.d/69-flame.sh
-  echo '#!/sbin/sh
+  if [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.skip.backup_script")" -eq "1" ]; then
+    echo -e "\nSkipping addon.d script installation" >> $flame_log
+  else
+    echo -e "\nInstalling addon.d script" >> $flame_log
+    echo '#!/sbin/sh
 #
 # ADDOND_VERSION=2
 #
@@ -860,43 +864,44 @@ if [ -d $SYSTEM/addon.d ]; then
 . /tmp/backuptool.functions
 
 rm_list="' > $temp_backup_script
-  if [ "$remove_camera" = "true" ]; then
-    echo "$stock_camera" | sed '/^$/d' >> $temp_backup_script
-  fi
-  if [ "$google_packageinstaller" = "true" ]; then
-    echo "$aosp_packageinstaller" | sed '/^$/d' >> $temp_backup_script
-  fi
-  if [ "$google_setupwizard" = "true" ]; then
-    echo "$provision" | sed '/^$/d' >> $temp_backup_script
-    echo "$lineage_setup" | sed '/^$/d' >> $temp_backup_script
-  fi
-  if [ "$google_dialer" = "true" ]; then
-    echo "$aosp_dialer" | sed '/^$/d' >> $temp_backup_script
-  fi
-  if [ "$google_contacts" = "true" ]; then
-    echo "$aosp_contacts" | sed '/^$/d' >> $temp_backup_script
-  fi
-  if [ "$google_messages" = "true" ]; then
-    echo "$stock_messages" | sed '/^$/d' >> $temp_backup_script
-  fi
-  if [ "$google_keyboard" = "true" ]; then
-    echo "$aosp_keyboard" | sed '/^$/d' >> $temp_backup_script
-  fi
-  if [ "$flame_edition" = "basic" ]; then
-    echo -n "$rm_list_basic" | sed '/^$/d' >> $temp_backup_script
-  elif [ "$flame_edition" = "full" ]; then
-    echo -n "$rm_list_full" | sed '/^$/d' >> $temp_backup_script
-  fi
-  echo -e '"\n\nlist_files() {
+    if [ "$remove_camera" = "true" ]; then
+      echo "$stock_camera" | sed '/^$/d' >> $temp_backup_script
+    fi
+    if [ "$google_packageinstaller" = "true" ]; then
+      echo "$aosp_packageinstaller" | sed '/^$/d' >> $temp_backup_script
+    fi
+    if [ "$google_setupwizard" = "true" ]; then
+      echo "$provision" | sed '/^$/d' >> $temp_backup_script
+      echo "$lineage_setup" | sed '/^$/d' >> $temp_backup_script
+    fi
+    if [ "$google_dialer" = "true" ]; then
+      echo "$aosp_dialer" | sed '/^$/d' >> $temp_backup_script
+    fi
+    if [ "$google_contacts" = "true" ]; then
+      echo "$aosp_contacts" | sed '/^$/d' >> $temp_backup_script
+    fi
+    if [ "$google_messages" = "true" ]; then
+      echo "$stock_messages" | sed '/^$/d' >> $temp_backup_script
+    fi
+    if [ "$google_keyboard" = "true" ]; then
+      echo "$aosp_keyboard" | sed '/^$/d' >> $temp_backup_script
+    fi
+    if [ "$flame_edition" = "basic" ]; then
+      echo -n "$rm_list_basic" | sed '/^$/d' >> $temp_backup_script
+    elif [ "$flame_edition" = "full" ]; then
+      echo -n "$rm_list_full" | sed '/^$/d' >> $temp_backup_script
+    fi
+    echo -e '"\n\nlist_files() {
 cat <<EOF' >> $temp_backup_script
-  echo -e "$backup_file_list" | sed '/^$/d' | sort >> $temp_backup_script
-  echo -e 'EOF
+    echo -e "$backup_file_list" | sed '/^$/d' | sort >> $temp_backup_script
+    echo -e 'EOF
 }\n' >> $temp_backup_script
-  cat $temp_backup_script > $TMP/69-flame.sh
-  cat $backup_script >> $TMP/69-flame.sh
-  cp -f $TMP/69-flame.sh $SYSTEM/addon.d/69-flame.sh
-  chcon -h u:object_r:system_file:s0 "$SYSTEM/addon.d/69-flame.sh"
-  chmod 0755 "$SYSTEM/addon.d/69-flame.sh"
+    cat $temp_backup_script > $TMP/69-flame.sh
+    cat $backup_script >> $TMP/69-flame.sh
+    cp -f $TMP/69-flame.sh $SYSTEM/addon.d/69-flame.sh
+    chcon -h u:object_r:system_file:s0 "$SYSTEM/addon.d/69-flame.sh"
+    chmod 0755 "$SYSTEM/addon.d/69-flame.sh"
+  fi
 fi
 
 # Create lib symlinks
