@@ -116,6 +116,7 @@ app/ViaPrebuilt
 app/ViaBrowser
 app/ViaBrowserPrebuilt
 app/GoogleLocationHistory
+app/WallpaperPickerGoogleRelease
 priv-app/AudioFX
 priv-app/ExtServices
 priv-app/Browser
@@ -174,11 +175,9 @@ priv-app/SoundPickerPrebuilt
 priv-app/PrebuiltSoundPicker
 priv-app/Turbo
 priv-app/TurboPrebuilt
-priv-app/Wallpapers
-priv-app/WallpaperPrebuilt
-priv-app/WallpapersPrebuilt
 priv-app/WallpapersGooglePrebuilt
 priv-app/WallpaperGooglePrebuilt
+priv-app/WallpaperPickerGoogleRelease
 priv-app/DeviceHealthService
 priv-app/AndroidPlafoPlatformServices
 priv-app/LatinIMEGooglePrebuilt"
