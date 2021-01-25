@@ -732,7 +732,9 @@ set_progress 0.80
 ui_print " "
 ui_print "- Performing other tasks"
 # Check for stock cam removal
-if [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.keep.snap")" -eq "1" ]; then
+if [ ! "$flame_edition" = "basic" ] && [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.keep.snap")" -eq "1" ]; then
+  remove_camera="false"
+elif [ "$flame_edition" = "basic" ]; then
   remove_camera="false"
 else
   remove_camera="true"
