@@ -842,12 +842,6 @@ if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
   ln -sfn "/system/lib64/libjni_latinimegoogle.so" "/system/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
 fi
 
-# Delete runtime permissions
-if is_mounted /data && [ ! -e $SYSTEM/etc/flame.prop ]; then
-  [ -f "/data/system/users/0/runtime-permissions.xml" ] && rm -rf /data/system/users/0/runtime-permissions.xml
-  [ -f "/data/misc_de/0/apexdata/com.android.permission/runtime-permissions.xml" ] && rm -rf /data/misc_de/0/apexdata/com.android.permission/runtime-permissions.xml
-fi
-
 # Install flame.prop
 rm -rf $SYSTEM/etc/flame.prop
 cp -f $TMP/flame.prop $SYSTEM/etc/flame.prop
