@@ -274,9 +274,9 @@ clean_up() {
 
 path_info() {
   ls / > "$log_dir/rootpathinfo.txt"
-  ls -R $SYSTEM > "$log_dir/systempathinfo.txt"
-  ls -R $SYSTEM/product > "$log_dir/productpathinfo.txt" 2>/dev/null
-  ls -R $SYSTEM/system_ext > "$log_dir/system_extpathinfo.txt" 2>/dev/null
+  ls -RZl $SYSTEM > "$log_dir/systempathinfo.txt"
+  ls -RZl $SYSTEM/product > "$log_dir/productpathinfo.txt" 2>/dev/null
+  ls -RZl $SYSTEM/system_ext > "$log_dir/system_extpathinfo.txt" 2>/dev/null
 }
 
 space_before() {
