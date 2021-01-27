@@ -45,7 +45,6 @@ WallpaperPickerGoogle"
 # Pre-installed unnecessary app list
 rm_list_basic="
 app/ExtShared
-app/FaceLock
 app/GoogleContactSyncAdapter
 app/GoogleExtShared
 app/GoogleLocationHistory
@@ -85,7 +84,6 @@ app/Email2
 app/Etar
 app/ExactCalculator
 app/ExtShared
-app/FaceLock
 app/Gallery2
 app/GalleryGo
 app/GalleryGoPrebuilt
