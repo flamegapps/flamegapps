@@ -2,7 +2,7 @@
 #
 ###########################################
 #
-# Copyright (C) 2020 FlameGApps Project
+# Copyright (C) 2021 FlameGApps Project
 #
 # This file is part of the FlameGApps Project created by ayandebnath
 #
