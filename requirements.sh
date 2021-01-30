@@ -16,7 +16,7 @@ INSTALLED='installed_tools.txt'
 
 apt list --installed > $INSTALLED 2>/dev/null
 
-REQUIRED="git zip unzip tar xz-utils"
+REQUIRED="git git-lfs zip unzip tar xz-utils"
 
 echo -e "\n${YELLOW}Checking installed tools $NC"
 
