@@ -729,14 +729,6 @@ sleep 0.5
 set_progress 0.80
 ui_print " "
 ui_print "- Performing other tasks"
-# Delete packages.xml & runtime-permissions.xml
-if is_mounted /data && [ -f "/data/system/packages.xml" ] && [ ! -f $SYSTEM/etc/flame.prop ]; then 
-  echo -e "\n- Deleting packages.xml & runtime-permissions.xml" >> $flame_log
-  rm -rf /data/system/packages.xml
-  [ -f "/data/system/users/0/runtime-permissions.xml" ] && rm -rf /data/system/users/0/runtime-permissions.xml	
-  [ -f "/data/misc_de/0/apexdata/com.android.permission/runtime-permissions.xml" ] && rm -rf /data/misc_de/0/apexdata/com.android.permission/runtime-permissions.xml
-fi
-
 # Check for stock cam removal
 if [ ! "$flame_edition" = "basic" ] && [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.keep.snap")" -eq "1" ]; then
   remove_camera="false"
