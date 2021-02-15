@@ -528,6 +528,7 @@ flame_log="$log_dir/installation_log.txt"
 build_info="$log_dir/build_info.prop"
 backup_script="$TMP/backup_script.sh"
 temp_backup_script="$TMP/temp_backup_script.sh"
+overlay_installed="false"
 mkdir -p $UNZIP_FOLDER
 mkdir -p $log_dir
 space_before
@@ -695,7 +696,12 @@ install_gapps() {
       dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
       for file in $file_list; do
         install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
-        chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
+        if echo "${file}" | grep -q "Overlay.apk"; then
+          overlay_installed="true"
+          chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/${file}"
+        else
+          chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
+        fi
         chmod 0644 "$SYSTEM/${file}"
         backup_file_list="$backup_file_list\n${file}"
       done
@@ -729,6 +735,9 @@ sleep 0.5
 set_progress 0.80
 ui_print " "
 ui_print "- Performing other tasks"
+# Change context of /product/overlay dir
+[ "$overlay_installed" = "true" ] && chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/product/overlay"
+
 # Check for stock cam removal
 if [ ! "$flame_edition" = "basic" ] && [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.keep.snap")" -eq "1" ]; then
   remove_camera="false"
@@ -756,7 +765,6 @@ fi
 if [ -e $SYSTEM/priv-app/GoogleDialer/GoogleDialer.apk ]; then
   google_dialer="true"
   remove_fd "$aosp_dialer"
-  chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/product/overlay"
   chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/product/overlay/GoogleDialerOverlay.apk"
 fi
 
