@@ -199,9 +199,9 @@ mk_wellbeing() {
 }
 
 mk_sound_picker() {
-  echo ">>> Compressing SoundPickerPrebuilt"
+  echo ">>> Compressing GoogleSoundPicker"
   make_app
-  copy_file $SDK_ALL/app/SoundPickerPrebuilt $GAPPS_DIR/system/app/
+  copy_file $SDK_ALL/app/SoundPickerGooglePrebuilt $GAPPS_DIR/system/app/
   compress_gapps "SoundPickerGoogle.tar.xz"
 }
 
