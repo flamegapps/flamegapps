@@ -48,6 +48,7 @@ app/ExtShared
 app/GoogleContactSyncAdapter
 app/GoogleExtShared
 app/GoogleLocationHistory
+app/SoundPickerGooglePrebuilt
 priv-app/AndroidPlatformServices
 priv-app/ExtServices
 priv-app/GmsCore
@@ -102,14 +103,12 @@ app/Photos
 app/PhotosPrebuilt
 app/PrebuiltBugle
 app/PrebuiltDeskClock
-app/PrebuiltSoundPicker
 app/RetroMusicPlayer
 app/RetroMusicPlayerPrebuilt
 app/RevengeOSCalculator
 app/SimpleCalendar
 app/SimpleGallery
-app/SoundPicker
-app/SoundPickerPrebuilt
+app/SoundPickerGooglePrebuilt
 app/Via
 app/ViaBrowser
 app/ViaBrowserPrebuilt
@@ -159,7 +158,6 @@ priv-app/PrebuiltGalleryGo
 priv-app/PrebuiltGmsCore
 priv-app/PrebuiltGmsCorePi
 priv-app/PrebuiltGmsCoreQt
-priv-app/PrebuiltSoundPicker
 priv-app/RetroMusicPlayer
 priv-app/RetroMusicPlayerPrebuilt
 priv-app/SetupWizard
@@ -167,8 +165,6 @@ priv-app/SetupWizardPrebuilt
 priv-app/SimpleGallery
 priv-app/SnapdragonGallery
 priv-app/SnapGallery
-priv-app/SoundPicker
-priv-app/SoundPickerPrebuilt
 priv-app/Turbo
 priv-app/TurboPrebuilt
 priv-app/Via
@@ -199,6 +195,14 @@ app/QKSMS
 app/RevengeMessages
 priv-app/messaging
 priv-app/Messaging"
+
+stock_soundpicker="
+app/PrebuiltSoundPicker
+app/SoundPicker
+app/SoundPickerPrebuilt
+priv-app/PrebuiltSoundPicker
+priv-app/SoundPicker
+priv-app/SoundPickerPrebuilt"
 
 provision="
 app/provision
@@ -786,6 +790,12 @@ if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
   remove_fd "$aosp_keyboard"
 fi
 
+# Delete stock SoundPicker if Google SoundPicker is present
+if [ -e $SYSTEM/app/SoundPickerGooglePrebuilt/SoundPickerGooglePrebuilt.apk ]; then
+  google_soundpicker="true"
+  remove_fd "$stock_soundpicker"
+fi
+
 # Install addon.d script
 if [ -d $SYSTEM/addon.d ]; then
   rm -rf $SYSTEM/addon.d/69-flame.sh
@@ -823,6 +833,9 @@ rm_list="' > $temp_backup_script
     fi
     if [ "$google_keyboard" = "true" ]; then
       echo "$aosp_keyboard" | sed '/^$/d' >> $temp_backup_script
+    fi
+    if [ "$google_soundpicker" = "true" ]; then
+      echo "$stock_soundpicker" | sed '/^$/d' >> $temp_backup_script
     fi
     if [ "$flame_edition" = "basic" ]; then
       echo -n "$rm_list_basic" | sed '/^$/d' >> $temp_backup_script
