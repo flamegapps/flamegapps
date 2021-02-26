@@ -845,6 +845,7 @@ rm_list="' > $temp_backup_script
     echo -e '"\n\nlist_files() {
 cat <<EOF' >> $temp_backup_script
     echo -e "$backup_file_list" | sed '/^$/d' | sort >> $temp_backup_script
+    echo 'etc/flame.prop' >> $temp_backup_script
     echo -e 'EOF
 }\n' >> $temp_backup_script
     cat $temp_backup_script > $TMP/69-flame.sh
