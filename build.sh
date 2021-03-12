@@ -23,8 +23,8 @@ export GREEN='\033[0;32m'
 export YELLOW='\033[0;33m'
 export NC='\033[0m'
 export home="`pwd`"
-export arg_1=$1
-export arg_2=$2
+export arg_1="$1"
+export arg_2="$2"
 
 load_scripts() {
   . requirements.sh
@@ -121,13 +121,13 @@ clean_up() {
   rm -rf $home/installed*
 }
 
-if [ $arg_1 -eq 9 ]; then
+if [ "$arg_1" = "9" ]; then
   ANDROID=9.0
   SDK=28
-elif [ $arg_1 -eq 10 ]; then
+elif [ "$arg_1" = "10" ]; then
   ANDROID=10.0
   SDK=29
-elif [ $arg_1 -eq 11 ]; then
+elif [ "$arg_1" = "11" ]; then
   ANDROID=11.0
   SDK=30
 else
