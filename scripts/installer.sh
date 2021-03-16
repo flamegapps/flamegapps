@@ -666,7 +666,12 @@ install_core() {
   dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
   for file in $file_list; do
     install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
-    chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
+    if echo "${file}" | grep -q "Overlay.apk"; then
+      overlay_installed="true"
+      chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/${file}"
+    else
+      chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
+    fi
     chmod 0644 "$SYSTEM/${file}"
     backup_file_list="$backup_file_list\n${file}"
   done
