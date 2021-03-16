@@ -91,7 +91,7 @@ mk_core_29() {
 
 mk_core_30() {
   echo ">>> Compressing core files"
-  mkdir -p $CORE_DIR/system/app $CORE_DIR/system/priv-app
+  mkdir -p $CORE_DIR/system/app $CORE_DIR/system/priv-app $CORE_DIR/system/product
   copy_file $SDK_30/etc $CORE_DIR/system/
   copy_file $SDK_30/framework $CORE_DIR/system/
   copy_file $SDK_30/app/GoogleContactsSyncAdapter $CORE_DIR/system/app/
@@ -103,6 +103,7 @@ mk_core_30() {
   copy_file $SDK_30/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/Phonesky $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
+  copy_file $SDK_30/product/overlay $CORE_DIR/system/product/
   compress_core
 }
 
