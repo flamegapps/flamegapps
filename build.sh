@@ -18,6 +18,7 @@ ZIP_DIR='zip_dir'
 BUILD_DIR='builds'
 DATE=`date +"%Y-%m-%d"`
 ZIP_DATE=`date +"%Y%m%d"`
+START_TIME=`date +%s`
 export RED='\033[0;31m'
 export GREEN='\033[0;32m'
 export YELLOW='\033[0;33m'
@@ -167,4 +168,4 @@ create_zip
 sign_zip
 clean_up
 
-echo -e "--> ${GREEN}Build Successful..!${NC}\n"
+echo -e "--> ${GREEN}Build took $(( `date +%s` - $START_TIME))s. ${NC}\n"
