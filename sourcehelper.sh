@@ -12,7 +12,7 @@
 ###########################################
 #
 
-URL="https://gitlab.com/flamegapps/packages.git"
+URL="https://gitlab.com/flamegapps/gapps-resources.git"
 DEST='repo'
 BRANCH='master'
 
