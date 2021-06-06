@@ -42,6 +42,10 @@ SetupWizard
 SoundPickerGoogle
 WallpaperPickerGoogle"
 
+# List of extra/optional files
+extra_list="
+PixelConfig"
+
 # List of pre-installed unnecessary files
 rm_list_basic="
 app/ExtShared
@@ -561,6 +565,7 @@ recovery_actions
 PROPFILES="$SYSTEM/build.prop $TMP/flame.prop"
 CORE_DIR="$TMP/tar_core"
 GAPPS_DIR="$TMP/tar_gapps"
+EXTRA_DIR="$TMP/tar_extra"
 UNZIP_FOLDER="$TMP/unzip_dir"
 EX_SYSTEM="$UNZIP_FOLDER/system"
 zip_dir="$(dirname "$ZIPFILE")"
@@ -760,6 +765,41 @@ install_gapps() {
   done
 }
 
+install_extra() {
+  set_progress 0.75
+  ui_print " "
+  for g in $extra_list; do
+    local extra=""
+    if [ "$(get_file_prop $TMP/config.prop "$g")" -eq "1" ]; then
+      extra="$g"
+    fi
+    if [ -n "$extra" ]; then
+      ui_print "- Installing $extra"
+      unzip -o "$ZIPFILE" "tar_extra/$extra.tar.xz" -d $TMP
+      tar -xf "$EXTRA_DIR/$extra.tar.xz" -C $UNZIP_FOLDER
+      rm -rf $EXTRA_DIR/$extra.tar.xz
+      file_list="$(find "$EX_SYSTEM/" -mindepth 1 -type f | cut -d/ -f5-)"
+      dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
+      for file in $file_list; do
+        install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
+        if echo "${file}" | grep -q "Overlay.apk"; then
+          overlay_installed="true"
+          chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/${file}"
+        else
+          chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
+        fi
+        chmod 0644 "$SYSTEM/${file}"
+        backup_file_list="$backup_file_list\n${file}"
+      done
+      for dir in $dir_list; do
+        chcon -h u:object_r:system_file:s0 "$SYSTEM/${dir}"
+        chmod 0755 "$SYSTEM/${dir}"
+      done
+      rm -rf $UNZIP_FOLDER/*
+    fi
+  done
+}
+
 # Ensure gapps list
 [ "$flame_edition" = "basic" ] && gapps_list="$gapps_list_basic" || gapps_list="$gapps_list_full"
 
@@ -773,6 +813,12 @@ install_core >> $flame_log
 # Install gapps files
 echo -e "\n- Installing gapps files" >> $flame_log
 install_gapps >> $flame_log
+
+# Install extra/optional files (gapps config necessary)
+if [ "$gapps_config" = "true" ]; then
+  echo -e "\n- Installing extra files" >> $flame_log
+  install_extra >> $flame_log
+fi
 
 echo -e "\n                 Installation Finished            " >> $flame_log
 echo ----------------------------------------------------------------- >> $flame_log
