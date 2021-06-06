@@ -18,8 +18,10 @@ SDK_30=repo/sdk-30
 SDK_ALL=repo/sdk-all
 CORE_DIR=temp_core
 GAPPS_DIR=temp_gapps
+EXTRA_DIR=temp_extra
 CORE_OUT=$ZIP_DIR/tar_core
 GAPPS_OUT=$ZIP_DIR/tar_gapps
+EXTRA_OUT=$ZIP_DIR/tar_extra
 
 make_app() {
   rm -rf $GAPPS_DIR/system
@@ -53,6 +55,13 @@ compress_gapps() {
   tar -cf - * | xz -9e > ../$GAPPS_OUT/$1
   cd ..
   rm -rf $GAPPS_DIR/*
+}
+
+compress_extra() {
+  cd $EXTRA_DIR
+  tar -cf - * | xz -9e > ../$EXTRA_OUT/$1
+  cd ..
+  rm -rf $EXTRA_DIR/*
 }
 
 mk_core_28() {
@@ -292,4 +301,11 @@ mk_wall_picker_30() {
   make_app
   copy_file $SDK_30/app/WallpaperPickerGooglePrebuilt $GAPPS_DIR/system/app/
   compress_gapps "WallpaperPickerGoogle.tar.xz"
+}
+
+mk_pixel_config() {
+  echo ">>> Compressing GooglePixelConfig"
+  mkdir -p $EXTRA_DIR/system
+  copy_file $SDK_ALL/etc $EXTRA_DIR/system/
+  compress_extra "PixelConfig.tar.xz"
 }

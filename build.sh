@@ -40,6 +40,7 @@ create_dir() {
   mkdir -p $ZIP_DIR/META-INF/com/google/android
   mkdir $ZIP_DIR/tar_core
   mkdir $ZIP_DIR/tar_gapps
+  mkdir $ZIP_DIR/tar_extra
 }
 
 copy_backup_script() {
@@ -66,6 +67,7 @@ make_gapps() {
     mk_cal_sync
     mk_wellbeing
     mk_sound_picker
+    mk_pixel_config
   else
     mk_core_$SDK
     mk_markup_$SDK
@@ -84,6 +86,7 @@ make_gapps() {
     mk_gboard
     mk_photos
     mk_wall_picker_$SDK
+    mk_pixel_config
   fi
 }
 
@@ -119,6 +122,7 @@ clean_up() {
   rm -rf $ZIP_DIR
   rm -rf $CORE_DIR
   rm -rf $GAPPS_DIR
+  rm -rf $EXTRA_DIR
   rm -rf $home/installed*
 }
 
