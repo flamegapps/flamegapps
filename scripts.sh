@@ -19,6 +19,7 @@ ro.flame.android='$ANDROID'
 ro.flame.sdk='$SDK'
 ro.flame.arch='$ARCH'
 ro.flame.edition='$EDITION'
+ro.flame.build_date='$DATE'
 ' > $ZIP_DIR/flame.prop
 }
 
