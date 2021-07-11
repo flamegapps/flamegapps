@@ -76,6 +76,7 @@ mk_core_28() {
   copy_file $SDK_28/priv-app/GoogleExtServices $CORE_DIR/system/priv-app/
   copy_file $SDK_28/priv-app/GoogleServicesFramework $CORE_DIR/system/priv-app/
   copy_file $SDK_28/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
+  copy_file $SDK_ALL/priv-app/AndroidAutoStubPrebuilt $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/Phonesky $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
   compress_core
@@ -93,6 +94,7 @@ mk_core_29() {
   copy_file $SDK_29/priv-app/GoogleExtServices $CORE_DIR/system/priv-app/
   copy_file $SDK_29/priv-app/GoogleServicesFramework $CORE_DIR/system/priv-app/
   copy_file $SDK_29/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
+  copy_file $SDK_ALL/priv-app/AndroidAutoStubPrebuilt $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/Phonesky $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
   compress_core
@@ -110,6 +112,7 @@ mk_core_30() {
   copy_file $SDK_30/priv-app/GoogleExtServices $CORE_DIR/system/priv-app/
   copy_file $SDK_30/priv-app/GoogleServicesFramework $CORE_DIR/system/priv-app/
   copy_file $SDK_30/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
+  copy_file $SDK_ALL/priv-app/AndroidAutoStubPrebuilt $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/Phonesky $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
   copy_file $SDK_30/product/overlay $CORE_DIR/system/product/
