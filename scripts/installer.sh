@@ -960,40 +960,4 @@ cp -f $TMP/flame.prop $SYSTEM/etc/flame.prop
 chcon -h u:object_r:system_file:s0 "$SYSTEM/etc/flame.prop"
 chmod 0644 "$SYSTEM/etc/flame.prop"
 
-# Set Google Dialer/Phone as default phone app if it is present
-if [ -e $SYSTEM/priv-app/GoogleDialer/GoogleDialer.apk ]; then
-  # set Google Dialer as default; based on the work of osm0sis @ xda-developers
-  setver="122"  # lowest version in MM, tagged at 6.0.0
-  setsec="/data/system/users/0/settings_secure.xml"
-  if [ -f "$setsec" ]; then
-    if grep -q 'dialer_default_application' "$setsec"; then
-      if ! grep -q 'dialer_default_application" value="com.google.android.dialer' "$setsec"; then
-        curentry="$(grep -o 'dialer_default_application" value=.*$' "$setsec")"
-        newentry='dialer_default_application" value="com.google.android.dialer" package="android" />\r'
-        sed -i "s;${curentry};${newentry};" "$setsec"
-      fi
-    else
-      max="0"
-      for i in $(grep -o 'id=.*$' "$setsec" | cut -d '"' -f 2); do
-        test "$i" -gt "$max" && max="$i"
-      done
-      entry='<setting id="'"$((max + 1))"'" name="dialer_default_application" value="com.google.android.dialer" package="android" />\r'
-      sed -i "/<settings version=\"/a\ \ ${entry}" "$setsec"
-    fi
-  else
-    if [ ! -d "/data/system/users/0" ]; then
-      install -d "/data/system/users/0"
-      chown -R 1000:1000 "/data/system"
-      chmod -R 775 "/data/system"
-      chmod 700 "/data/system/users/0"
-    fi
-    { echo -e "<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>\r";
-    echo -e '<settings version="'$setver'">\r';
-    echo -e '  <setting id="1" name="dialer_default_application" value="com.google.android.dialer" package="android" />\r';
-    echo -e '</settings>'; } > "$setsec"
-  fi
-  chown 1000:1000 "$setsec"
-  chmod 600 "$setsec"
-fi
-
 exit_all;
