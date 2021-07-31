@@ -67,6 +67,7 @@ make_gapps() {
     mk_cal_sync
     mk_wellbeing
     mk_sound_picker
+    mk_android_auto_stub
     mk_pixel_config
   else
     mk_core_$SDK
@@ -86,6 +87,7 @@ make_gapps() {
     mk_gboard
     mk_photos
     mk_wall_picker_$SDK
+    mk_android_auto_stub
     mk_pixel_config
   fi
 }

@@ -16,6 +16,7 @@
 ##
 # List of the basic edition gapps files
 gapps_list_basic="
+AndroidAutoStub
 CalendarSync
 DigitalWellbeing
 GooglePackageInstaller
@@ -25,6 +26,7 @@ SoundPickerGoogle"
 
 # List of the full edition gapps files
 gapps_list_full="
+AndroidAutoStub
 CalendarSync
 DeviceHealthServices
 DigitalWellbeing
