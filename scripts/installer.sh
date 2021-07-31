@@ -48,6 +48,7 @@ PixelConfig"
 
 # List of pre-installed unnecessary files
 rm_list_basic="
+app/AndroidAutoStubPrebuilt
 app/ExtShared
 app/GoogleContactSyncAdapter
 app/GoogleExtShared
@@ -71,6 +72,7 @@ etc/sysconfig/pixel_2018_exclusive.xml
 etc/sysconfig/pixel_experience_2017.xml
 etc/sysconfig/pixel_experience_2018.xml
 lib64/libsketchology_native.so
+priv-app/AndroidAutoStubPrebuilt
 priv-app/AndroidPlatformServices
 priv-app/ExtServices
 priv-app/GmsCore
@@ -87,6 +89,7 @@ priv-app/WellbeingGooglePrebuilt
 priv-app/WellbeingPrebuilt"
 
 rm_list_full="
+app/AndroidAutoStubPrebuilt
 app/AudioFX
 app/Browser
 app/Browser2
@@ -155,6 +158,7 @@ etc/sysconfig/pixel_experience_2017.xml
 etc/sysconfig/pixel_experience_2018.xml
 lib64/libjni_latinimegoogle.so
 lib64/libsketchology_native.so
+priv-app/AndroidAutoStubPrebuilt
 priv-app/AndroidPlafoPlatformServices
 priv-app/AudioFX
 priv-app/Browser
