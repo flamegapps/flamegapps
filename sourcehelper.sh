@@ -19,7 +19,7 @@ BRANCH='master'
 if [ -d $DEST ]; then
   echo -e "\n${YELLOW}Pulling changes from APK repository $NC"
   cd $DEST
-  git pull
+  git pull origin $BRANCH
   if [ $? -gt 0 ]; then
     echo -e "--!$RED *** Unable to pull changes, please check your internet connection *** $NC"
     echo -e "--!$RED *** The script will now exit *** ${NC}"
