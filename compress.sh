@@ -12,7 +12,6 @@
 ###########################################
 #
 
-SDK_28=repo/sdk-28
 SDK_29=repo/sdk-29
 SDK_30=repo/sdk-30
 SDK_ALL=repo/sdk-all
@@ -64,23 +63,6 @@ compress_extra() {
   rm -rf $EXTRA_DIR/*
 }
 
-mk_core_28() {
-  echo ">>> Compressing core files"
-  mkdir -p $CORE_DIR/system/app $CORE_DIR/system/priv-app $CORE_DIR/system/lib $CORE_DIR/system/lib64
-  copy_file $SDK_28/etc $CORE_DIR/system/
-  copy_file $SDK_28/framework $CORE_DIR/system/
-  copy_file $SDK_28/app/GoogleContactsSyncAdapter $CORE_DIR/system/app/
-  copy_file $SDK_28/app/GoogleExtShared $CORE_DIR/system/app/
-  copy_file $SDK_28/priv-app/CarrierSetup $CORE_DIR/system/priv-app/
-  copy_file $SDK_28/priv-app/ConfigUpdater $CORE_DIR/system/priv-app/
-  copy_file $SDK_28/priv-app/GoogleExtServices $CORE_DIR/system/priv-app/
-  copy_file $SDK_28/priv-app/GoogleServicesFramework $CORE_DIR/system/priv-app/
-  copy_file $SDK_28/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/Phonesky $CORE_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
-  compress_core
-}
-
 mk_core_29() {
   echo ">>> Compressing core files"
   mkdir -p $CORE_DIR/system/app $CORE_DIR/system/priv-app
@@ -116,15 +98,6 @@ mk_core_30() {
   compress_core
 }
 
-mk_markup_28() {
-  echo ">>> Compressing MarkupGoogle"
-  make_app
-  copy_file $SDK_28/app/MarkupGoogle $GAPPS_DIR/system/app/
-  mkdir -p $GAPPS_DIR/system/lib64
-  copy_file $SDK_28/lib64/libsketchology_native.so $GAPPS_DIR/system/lib64/
-  compress_gapps "MarkupGoogle.tar.xz"
-}
-
 mk_markup_29() {
   echo ">>> Compressing MarkupGoogle"
   make_app
@@ -141,16 +114,6 @@ mk_markup_30() {
   mkdir -p $GAPPS_DIR/system/lib64
   copy_file $SDK_30/lib64/libsketchology_native.so $GAPPS_DIR/system/lib64/
   compress_gapps "MarkupGoogle.tar.xz"
-}
-
-mk_setup_28() {
-  echo ">>> Compressing SetupWizard"
-  make_priv_app
-  copy_file $SDK_28/priv-app/SetupWizard $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/AndroidMigratePrebuilt $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GoogleBackupTransport $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GoogleRestore $GAPPS_DIR/system/priv-app/
-  compress_gapps "SetupWizard.tar.xz"
 }
 
 mk_setup_29() {
@@ -171,13 +134,6 @@ mk_setup_30() {
   copy_file $SDK_ALL/priv-app/GoogleBackupTransport $GAPPS_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/GoogleRestore $GAPPS_DIR/system/priv-app/
   compress_gapps "SetupWizard.tar.xz"
-}
-
-mk_package_installer_28() {
-  echo ">>> Compressing GooglePackageInstaller"
-  make_priv_app
-  copy_file $SDK_28/priv-app/GooglePackageInstaller $GAPPS_DIR/system/priv-app/
-  compress_gapps "GooglePackageInstaller.tar.xz" 
 }
 
 mk_package_installer_29() {
@@ -287,13 +243,6 @@ mk_android_auto_stub() {
   make_priv_app
   copy_file $SDK_ALL/priv-app/AndroidAutoStubPrebuilt $GAPPS_DIR/system/priv-app/
   compress_gapps "AndroidAutoStub.tar.xz"
-}
-
-mk_wall_picker_28() {
-  echo ">>> Compressing WallpaperPickerGoogle"
-  make_app
-  copy_file $SDK_28/app/WallpaperPickerGooglePrebuilt $GAPPS_DIR/system/app/
-  compress_gapps "WallpaperPickerGoogle.tar.xz"
 }
 
 mk_wall_picker_29() {

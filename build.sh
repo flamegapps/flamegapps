@@ -128,10 +128,7 @@ clean_up() {
   rm -rf $home/installed*
 }
 
-if [ "$arg_1" = "9" ]; then
-  ANDROID=9.0
-  SDK=28
-elif [ "$arg_1" = "10" ]; then
+if [ "$arg_1" = "10" ]; then
   ANDROID=10.0
   SDK=29
 elif [ "$arg_1" = "11" ]; then

@@ -374,9 +374,7 @@ remove_fd() {
   local LIST="$1"
   for f in $LIST; do
     rm -rf $SYSTEM/$f
-    if [ "$rom_sdk" -gt "28" ]; then
-      rm -rf $SYSTEM/product/$f
-    fi
+    rm -rf $SYSTEM/product/$f
     if [ "$rom_sdk" -gt "29" ]; then
       rm -rf $SYSTEM/system_ext/$f
     fi
