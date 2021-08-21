@@ -65,8 +65,11 @@ compress_extra() {
 
 mk_core_29() {
   echo ">>> Compressing core files"
-  mkdir -p $CORE_DIR/system/app $CORE_DIR/system/priv-app
-  copy_file $SDK_29/etc $CORE_DIR/system/
+  mkdir -p $CORE_DIR/system/app $CORE_DIR/system/etc $CORE_DIR/system/priv-app
+  copy_file $SDK_ALL/etc/default-permissions $CORE_DIR/system/etc/
+  copy_file $SDK_ALL/etc/permissions $CORE_DIR/system/etc/
+  copy_file $SDK_ALL/etc/preferred-apps $CORE_DIR/system/etc/
+  copy_file $SDK_ALL/etc/sysconfig $CORE_DIR/system/etc/
   copy_file $SDK_29/framework $CORE_DIR/system/
   copy_file $SDK_29/app/GoogleContactsSyncAdapter $CORE_DIR/system/app/
   copy_file $SDK_29/app/GoogleExtShared $CORE_DIR/system/app/
@@ -82,8 +85,11 @@ mk_core_29() {
 
 mk_core_30() {
   echo ">>> Compressing core files"
-  mkdir -p $CORE_DIR/system/app $CORE_DIR/system/priv-app $CORE_DIR/system/product
-  copy_file $SDK_30/etc $CORE_DIR/system/
+  mkdir -p $CORE_DIR/system/app $CORE_DIR/system/etc $CORE_DIR/system/priv-app $CORE_DIR/system/product/overlay
+  copy_file $SDK_ALL/etc/default-permissions $CORE_DIR/system/etc/
+  copy_file $SDK_ALL/etc/permissions $CORE_DIR/system/etc/
+  copy_file $SDK_ALL/etc/preferred-apps $CORE_DIR/system/etc/
+  copy_file $SDK_ALL/etc/sysconfig $CORE_DIR/system/etc/
   copy_file $SDK_30/framework $CORE_DIR/system/
   copy_file $SDK_30/app/GoogleContactsSyncAdapter $CORE_DIR/system/app/
   copy_file $SDK_30/app/GoogleExtShared $CORE_DIR/system/app/
@@ -94,7 +100,7 @@ mk_core_30() {
   copy_file $SDK_30/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/Phonesky $CORE_DIR/system/priv-app/
   copy_file $SDK_ALL/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
-  copy_file $SDK_30/product/overlay $CORE_DIR/system/product/
+  copy_file $SDK_30/overlay/forceQueryablePackagesOverlay.apk $CORE_DIR/system/product/overlay/
   compress_core
 }
 
@@ -211,7 +217,7 @@ mk_dialer() {
   make_priv_app
   mkdir -p $GAPPS_DIR/system/product/overlay
   copy_file $SDK_ALL/priv-app/GoogleDialer $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/product/overlay/GoogleDialerOverlay.apk $GAPPS_DIR/system/product/overlay/
+  copy_file $SDK_ALL/overlay/GoogleDialerOverlay.apk $GAPPS_DIR/system/product/overlay/
   compress_gapps "GoogleDialer.tar.xz"
 }
 
@@ -261,7 +267,10 @@ mk_wall_picker_30() {
 
 mk_pixel_config() {
   echo ">>> Compressing GooglePixelConfig"
-  mkdir -p $EXTRA_DIR/system
-  copy_file $SDK_ALL/etc $EXTRA_DIR/system/
+  mkdir -p $EXTRA_DIR/system/etc/sysconfig
+  copy_file $SDK_ALL/etc/sysconfig_pixel/nexus.xml $EXTRA_DIR/system/etc/sysconfig/
+  copy_file $SDK_ALL/etc/sysconfig_pixel/pixel_2018_exclusive.xml $EXTRA_DIR/system/etc/sysconfig/
+  copy_file $SDK_ALL/etc/sysconfig_pixel/pixel_experience_2017.xml $EXTRA_DIR/system/etc/sysconfig/
+  copy_file $SDK_ALL/etc/sysconfig_pixel/pixel_experience_2018.xml $EXTRA_DIR/system/etc/sysconfig/
   compress_extra "PixelConfig.tar.xz"
 }
