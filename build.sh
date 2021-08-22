@@ -60,20 +60,20 @@ copy_license() {
 
 make_gapps() {
   if [ "$EDITION" = "basic" ]; then
-    mk_core_$SDK
-    mk_markup_$SDK
-    mk_setup_$SDK
-    mk_package_installer_$SDK
+    mk_core
+    mk_markup
+    mk_setup
+    mk_package_installer
     mk_cal_sync
     mk_wellbeing
     mk_sound_picker
     mk_android_auto_stub
     mk_pixel_config
   else
-    mk_core_$SDK
-    mk_markup_$SDK
-    mk_setup_$SDK
-    mk_package_installer_$SDK
+    mk_core
+    mk_markup
+    mk_setup
+    mk_package_installer
     mk_cal_sync
     mk_wellbeing
     mk_sound_picker
@@ -86,7 +86,7 @@ make_gapps() {
     mk_messages
     mk_gboard
     mk_photos
-    mk_wall_picker_$SDK
+    mk_wall_picker
     mk_android_auto_stub
     mk_pixel_config
   fi

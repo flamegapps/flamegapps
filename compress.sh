@@ -12,9 +12,7 @@
 ###########################################
 #
 
-SDK_29=repo/sdk-29
-SDK_30=repo/sdk-30
-SDK_ALL=repo/sdk-all
+APK_REPO=repo
 CORE_DIR=temp_core
 GAPPS_DIR=temp_gapps
 EXTRA_DIR=temp_extra
@@ -54,186 +52,141 @@ compress_extra() {
   rm -rf $EXTRA_DIR/*
 }
 
-mk_core_29() {
+mk_core() {
   echo ">>> Compressing core files"
-  copy_file $SDK_ALL/etc/default-permissions $CORE_DIR/system/etc/
-  copy_file $SDK_ALL/etc/permissions $CORE_DIR/system/etc/
-  copy_file $SDK_ALL/etc/preferred-apps $CORE_DIR/system/etc/
-  copy_file $SDK_ALL/etc/sysconfig $CORE_DIR/system/etc/
-  copy_file $SDK_29/framework $CORE_DIR/system/
-  copy_file $SDK_29/app/GoogleContactsSyncAdapter $CORE_DIR/system/app/
-  copy_file $SDK_29/app/GoogleExtShared $CORE_DIR/system/app/
-  copy_file $SDK_29/priv-app/CarrierSetup $CORE_DIR/system/priv-app/
-  copy_file $SDK_29/priv-app/ConfigUpdater $CORE_DIR/system/priv-app/
-  copy_file $SDK_29/priv-app/GoogleExtServices $CORE_DIR/system/priv-app/
-  copy_file $SDK_29/priv-app/GoogleServicesFramework $CORE_DIR/system/priv-app/
-  copy_file $SDK_29/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/Phonesky $CORE_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/etc/default-permissions $CORE_DIR/system/etc/
+  copy_file $APK_REPO/sdk-all/etc/permissions $CORE_DIR/system/etc/
+  copy_file $APK_REPO/sdk-all/etc/preferred-apps $CORE_DIR/system/etc/
+  copy_file $APK_REPO/sdk-all/etc/sysconfig $CORE_DIR/system/etc/
+  copy_file $APK_REPO/sdk-${SDK}/framework $CORE_DIR/system/
+  copy_file $APK_REPO/sdk-${SDK}/app/GoogleContactsSyncAdapter $CORE_DIR/system/app/
+  copy_file $APK_REPO/sdk-${SDK}/app/GoogleExtShared $CORE_DIR/system/app/
+  copy_file $APK_REPO/sdk-${SDK}/priv-app/CarrierSetup $CORE_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-${SDK}/priv-app/ConfigUpdater $CORE_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-${SDK}/priv-app/GoogleExtServices $CORE_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-${SDK}/priv-app/GoogleServicesFramework $CORE_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-${SDK}/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/Phonesky $CORE_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
+  if [ "$SDK" -ge "30" ]; then
+    copy_file $APK_REPO/sdk-${SDK}/overlay/forceQueryablePackagesOverlay.apk $CORE_DIR/system/product/overlay/
+  fi
   compress_core
 }
 
-mk_core_30() {
-  echo ">>> Compressing core files"
-  copy_file $SDK_ALL/etc/default-permissions $CORE_DIR/system/etc/
-  copy_file $SDK_ALL/etc/permissions $CORE_DIR/system/etc/
-  copy_file $SDK_ALL/etc/preferred-apps $CORE_DIR/system/etc/
-  copy_file $SDK_ALL/etc/sysconfig $CORE_DIR/system/etc/
-  copy_file $SDK_30/framework $CORE_DIR/system/
-  copy_file $SDK_30/app/GoogleContactsSyncAdapter $CORE_DIR/system/app/
-  copy_file $SDK_30/app/GoogleExtShared $CORE_DIR/system/app/
-  copy_file $SDK_30/priv-app/CarrierSetup $CORE_DIR/system/priv-app/
-  copy_file $SDK_30/priv-app/ConfigUpdater $CORE_DIR/system/priv-app/
-  copy_file $SDK_30/priv-app/GoogleExtServices $CORE_DIR/system/priv-app/
-  copy_file $SDK_30/priv-app/GoogleServicesFramework $CORE_DIR/system/priv-app/
-  copy_file $SDK_30/priv-app/PrebuiltGmsCore $CORE_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/Phonesky $CORE_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/system/priv-app/
-  copy_file $SDK_30/overlay/forceQueryablePackagesOverlay.apk $CORE_DIR/system/product/overlay/
-  compress_core
-}
-
-mk_markup_29() {
+mk_markup() {
   echo ">>> Compressing MarkupGoogle"
-  copy_file $SDK_29/app/MarkupGoogle $GAPPS_DIR/system/app/
-  copy_file $SDK_29/lib64/libsketchology_native.so $GAPPS_DIR/system/lib64/
+  copy_file $APK_REPO/sdk-${SDK}/app/MarkupGoogle $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-${SDK}/lib64/libsketchology_native.so $GAPPS_DIR/system/lib64/
   compress_gapps "MarkupGoogle.tar.xz" 
 }
 
-mk_markup_30() {
-  echo ">>> Compressing MarkupGoogle"
-  copy_file $SDK_30/app/MarkupGoogle $GAPPS_DIR/system/app/
-  copy_file $SDK_30/lib64/libsketchology_native.so $GAPPS_DIR/system/lib64/
-  compress_gapps "MarkupGoogle.tar.xz"
-}
-
-mk_setup_29() {
+mk_setup() {
   echo ">>> Compressing SetupWizard"
-  copy_file $SDK_29/priv-app/SetupWizard $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/AndroidMigratePrebuilt $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GoogleBackupTransport $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GoogleRestore $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-${SDK}/priv-app/SetupWizard $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/AndroidMigratePrebuilt $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/GoogleBackupTransport $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/GoogleRestore $GAPPS_DIR/system/priv-app/
   compress_gapps "SetupWizard.tar.xz"
 }
 
-mk_setup_30() {
-  echo ">>> Compressing SetupWizard"
-  copy_file $SDK_30/priv-app/SetupWizard $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/AndroidMigratePrebuilt $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GoogleBackupTransport $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/priv-app/GoogleRestore $GAPPS_DIR/system/priv-app/
-  compress_gapps "SetupWizard.tar.xz"
-}
-
-mk_package_installer_29() {
+mk_package_installer() {
   echo ">>> Compressing GooglePackageInstaller"
-  copy_file $SDK_29/priv-app/GooglePackageInstaller $GAPPS_DIR/system/priv-app/
-  compress_gapps "GooglePackageInstaller.tar.xz" 
-}
-
-mk_package_installer_30() {
-  echo ">>> Compressing GooglePackageInstaller"
-  copy_file $SDK_30/priv-app/GooglePackageInstaller $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-${SDK}/priv-app/GooglePackageInstaller $GAPPS_DIR/system/priv-app/
   compress_gapps "GooglePackageInstaller.tar.xz" 
 }
 
 mk_cal_sync() {
   echo ">>> Compressing CalendarSync"
-  copy_file $SDK_ALL/app/GoogleCalendarSyncAdapter $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-all/app/GoogleCalendarSyncAdapter $GAPPS_DIR/system/app/
   compress_gapps "CalendarSync.tar.xz"
 }
 
 mk_wellbeing() {
   echo ">>> Compressing DigitalWellbeing"
-  copy_file $SDK_ALL/priv-app/WellbeingPrebuilt $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/WellbeingPrebuilt $GAPPS_DIR/system/priv-app/
   compress_gapps "DigitalWellbeing.tar.xz"
 }
 
 mk_sound_picker() {
   echo ">>> Compressing GoogleSoundPicker"
-  copy_file $SDK_ALL/app/SoundPickerGooglePrebuilt $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-all/app/SoundPickerGooglePrebuilt $GAPPS_DIR/system/app/
   compress_gapps "SoundPickerGoogle.tar.xz"
 }
 
 mk_health_service() {
   echo ">>> Compressing DeviceHealthServices"
-  copy_file $SDK_ALL/priv-app/Turbo $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/Turbo $GAPPS_DIR/system/priv-app/
   compress_gapps "DeviceHealthServices.tar.xz"
 }
 
 mk_calculator() {
   echo ">>> Compressing GoogleCalculator"
-  copy_file $SDK_ALL/app/CalculatorGooglePrebuilt $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-all/app/CalculatorGooglePrebuilt $GAPPS_DIR/system/app/
   compress_gapps "GoogleCalculator.tar.xz"
 }
 
 mk_calendar() {
   echo ">>> Compressing GoogleCalendar"
-  copy_file $SDK_ALL/app/CalendarGooglePrebuilt $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-all/app/CalendarGooglePrebuilt $GAPPS_DIR/system/app/
   compress_gapps "GoogleCalendar.tar.xz"
 }
 
 mk_clock() {
   echo ">>> Compressing GoogleClock"
-  copy_file $SDK_ALL/app/PrebuiltDeskClockGoogle $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-all/app/PrebuiltDeskClockGoogle $GAPPS_DIR/system/app/
   compress_gapps "GoogleClock.tar.xz"
 }
 
 mk_contact() {
   echo ">>> Compressing GoogleContacts"
-  copy_file $SDK_ALL/priv-app/GoogleContacts $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/GoogleContacts $GAPPS_DIR/system/priv-app/
   compress_gapps "GoogleContacts.tar.xz"
 }
 
 mk_dialer() {
   echo ">>> Compressing GoogleDialer"
-  copy_file $SDK_ALL/priv-app/GoogleDialer $GAPPS_DIR/system/priv-app/
-  copy_file $SDK_ALL/overlay/GoogleDialerOverlay.apk $GAPPS_DIR/system/product/overlay/
+  copy_file $APK_REPO/sdk-all/priv-app/GoogleDialer $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/overlay/GoogleDialerOverlay.apk $GAPPS_DIR/system/product/overlay/
   compress_gapps "GoogleDialer.tar.xz"
 }
 
 mk_messages() {
   echo ">>> Compressing GoogleMessages"
-  copy_file $SDK_ALL/app/PrebuiltBugle $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-all/app/PrebuiltBugle $GAPPS_DIR/system/app/
   compress_gapps "GoogleMessages.tar.xz"
 }
 
 mk_gboard() {
   echo ">>> Compressing GoogleKeyboard"
-  copy_file $SDK_ALL/app/LatinIMEGooglePrebuilt $GAPPS_DIR/system/app/
-  copy_file $SDK_ALL/lib64/libjni_latinimegoogle.so $GAPPS_DIR/system/lib64/
+  copy_file $APK_REPO/sdk-all/app/LatinIMEGooglePrebuilt $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-all/lib64/libjni_latinimegoogle.so $GAPPS_DIR/system/lib64/
   compress_gapps "GoogleKeyboard.tar.xz"
 }
 
 mk_photos() {
   echo ">>> Compressing GooglePhotos"
-  copy_file $SDK_ALL/app/Photos $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-all/app/Photos $GAPPS_DIR/system/app/
   compress_gapps "GooglePhotos.tar.xz"
 }
 
 mk_android_auto_stub() {
   echo ">>> Compressing AndroidAutoStub"
-  copy_file $SDK_ALL/priv-app/AndroidAutoStubPrebuilt $GAPPS_DIR/system/priv-app/
+  copy_file $APK_REPO/sdk-all/priv-app/AndroidAutoStubPrebuilt $GAPPS_DIR/system/priv-app/
   compress_gapps "AndroidAutoStub.tar.xz"
 }
 
-mk_wall_picker_29() {
+mk_wall_picker() {
   echo ">>> Compressing WallpaperPickerGoogle"
-  copy_file $SDK_29/app/WallpaperPickerGooglePrebuilt $GAPPS_DIR/system/app/
-  compress_gapps "WallpaperPickerGoogle.tar.xz"
-}
-
-mk_wall_picker_30() {
-  echo ">>> Compressing WallpaperPickerGoogle"
-  copy_file $SDK_30/app/WallpaperPickerGooglePrebuilt $GAPPS_DIR/system/app/
+  copy_file $APK_REPO/sdk-${SDK}/app/WallpaperPickerGooglePrebuilt $GAPPS_DIR/system/app/
   compress_gapps "WallpaperPickerGoogle.tar.xz"
 }
 
 mk_pixel_config() {
   echo ">>> Compressing GooglePixelConfig"
-  copy_file $SDK_ALL/etc/sysconfig_pixel/nexus.xml $EXTRA_DIR/system/etc/sysconfig/
-  copy_file $SDK_ALL/etc/sysconfig_pixel/pixel_2018_exclusive.xml $EXTRA_DIR/system/etc/sysconfig/
-  copy_file $SDK_ALL/etc/sysconfig_pixel/pixel_experience_2017.xml $EXTRA_DIR/system/etc/sysconfig/
-  copy_file $SDK_ALL/etc/sysconfig_pixel/pixel_experience_2018.xml $EXTRA_DIR/system/etc/sysconfig/
+  copy_file $APK_REPO/sdk-all/etc/sysconfig_pixel/nexus.xml $EXTRA_DIR/system/etc/sysconfig/
+  copy_file $APK_REPO/sdk-all/etc/sysconfig_pixel/pixel_2018_exclusive.xml $EXTRA_DIR/system/etc/sysconfig/
+  copy_file $APK_REPO/sdk-all/etc/sysconfig_pixel/pixel_experience_2017.xml $EXTRA_DIR/system/etc/sysconfig/
+  copy_file $APK_REPO/sdk-all/etc/sysconfig_pixel/pixel_experience_2018.xml $EXTRA_DIR/system/etc/sysconfig/
   compress_extra "PixelConfig.tar.xz"
 }
