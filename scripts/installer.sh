@@ -369,6 +369,12 @@ take_logs() {
   rm -rf $TMP/flamegapps_debug_logs.tar.gz
 }
 
+get_size() {
+  local FILE_SIZE=0
+  FILE_SIZE=`du -sk "$1" | cut -f1`
+  printf "$FILE_SIZE"
+}
+
 get_file_prop() {
   grep -m1 "^$2=" "$1" | cut -d= -f2
 }
@@ -621,6 +627,7 @@ build_info="$log_dir/build_info.prop"
 backup_script="$TMP/backup_script.sh"
 temp_backup_script="$TMP/temp_backup_script.sh"
 overlay_installed="false"
+buffer_space=2000
 mkdir -p $UNZIP_FOLDER
 mkdir -p $log_dir
 space_before
@@ -634,6 +641,7 @@ rom_version=`get_prop ro.build.version.release`
 rom_sdk=`get_prop ro.build.version.sdk`
 device_architecture=`get_prop ro.product.cpu.abilist`
 device_code=`get_prop ro.product.device`
+space_required=`get_prop ro.flame.required_size`
 
 if [ -z "$device_architecture" ]; then
   device_architecture=`get_prop ro.product.cpu.abi`
@@ -718,6 +726,36 @@ else
   ui_print " "
   sleep 0.5
   ui_print "! Failed to detect FlameGApps edition type"
+  sleep 0.5
+  ui_print " "
+  ui_print "******* FlameGApps Installation Failed *******"
+  ui_print " "
+  abort
+fi
+
+# Check available space for gapps installation
+space_required=$(($space_required + $buffer_space))
+space_available=`df -k $SYSTEM | tail -1 | awk '{print $3}'`
+for f in $removal_list; do
+  if [ -e "$SYSTEM/$f" ]; then
+    file_size=`get_size "$SYSTEM/$f"`
+    space_available=$(($space_available + $file_size))
+  fi
+done
+ui_print " "
+ui_print "- Availabe space: $space_available KB"
+(echo -e "\n- Availabe space $space_available"
+echo -e "\n- Required space $space_required") >> $flame_log
+if [ "$space_available" -lt "$space_required" ]; then
+  ui_print " "
+  ui_print "****************** WARNING *******************"
+  ui_print " "
+  sleep 0.5
+  ui_print "! Insufficient available space"
+  sleep 0.5
+  ui_print "Availbale space is $space_available KB"
+  sleep 0.5
+  ui_print "Space required $space_required KB"
   sleep 0.5
   ui_print " "
   ui_print "******* FlameGApps Installation Failed *******"
