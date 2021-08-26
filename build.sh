@@ -162,8 +162,8 @@ create_dir
 make_update_binary
 make_updater_script
 make_installer
-make_flame_prop
 make_gapps
+make_flame_prop
 copy_backup_script
 copy_busybox
 copy_license
