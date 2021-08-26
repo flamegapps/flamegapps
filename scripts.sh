@@ -20,6 +20,7 @@ ro.flame.sdk='$SDK'
 ro.flame.arch='$ARCH'
 ro.flame.edition='$EDITION'
 ro.flame.build_date='$DATE'
+ro.flame.required_size='$REQUIRED_SIZE'
 ' > $ZIP_DIR/flame.prop
 }
 

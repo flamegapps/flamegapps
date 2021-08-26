@@ -16,13 +16,24 @@ APK_REPO=repo
 CORE_DIR=temp_core
 GAPPS_DIR=temp_gapps
 EXTRA_DIR=temp_extra
+REQUIRED_SIZE=0
 CORE_OUT=$ZIP_DIR/tar_core
 GAPPS_OUT=$ZIP_DIR/tar_gapps
 EXTRA_OUT=$ZIP_DIR/tar_extra
 
+get_size() {
+  local FILE_SIZE
+  FILE_SIZE=`du -sk "$1" | cut -f1`
+  REQUIRED_SIZE=$(($REQUIRED_SIZE + $FILE_SIZE))
+}
+
 copy_file() {
-  mkdir -p "$2"
-  cp -r "$1" "$2"
+  local SOURCE DEST
+  SOURCE="$1"
+  DEST="$2"
+  get_size "$SOURCE"
+  mkdir -p "$DEST"
+  cp -r "$SOURCE" "$DEST"
   if [ $? -gt 0 ]; then
     echo -e "--> ${RED}*** Unable to copy files ***${NC}"
     echo -e "--> ${RED}*** The script will now exit ***${NC}"
