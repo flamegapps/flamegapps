@@ -706,29 +706,33 @@ if [ ! "$arch" = "$flame_arch" ]; then
   abort
 fi
 
+if [ "$flame_edition" = "basic" ]; then
+  removal_list="$rm_list_basic"
+  gapps_list="$gapps_list_basic"
+elif [ "$flame_edition" = "full" ]; then
+  removal_list="$rm_list_full"
+  gapps_list="$gapps_list_full"
+else
+  ui_print " "
+  ui_print "****************** WARNING *******************"
+  ui_print " "
+  sleep 0.5
+  ui_print "! Failed to detect FlameGApps edition type"
+  sleep 0.5
+  ui_print " "
+  ui_print "******* FlameGApps Installation Failed *******"
+  ui_print " "
+  abort
+fi
+
 # Remove pre-installed unnecessary system apps
 ui_print " "
 ui_print "- Removing unnecessary system apps"
 ui_print " "
 set_progress 0.30
 sleep 0.5
-if [ "$flame_edition" = "basic" ]; then
-  remove_fd "$rm_list_basic"
-  echo -e "\n- Removing basic list files" >> $flame_log
-elif [ "$flame_edition" = "full" ]; then
-  remove_fd "$rm_list_full"
-  echo -e "\n- Removing full list files" >> $flame_log
-else
-  ui_print "****************** WARNING *******************"
-  ui_print " "
-  sleep 0.5
-  echo "- Failed to detect edition type" >> $flame_log
-  ui_print "! Failed to detect FlameGApps edition type"
-  sleep 0.5
-  ui_print " "
-  ui_print "******* FlameGApps Installation Failed *******"
-  abort
-fi
+echo -e "\n- Removing $flame_edition list files" >> $flame_log
+remove_fd "$removal_list"
 
 check_gapps_config() {
   if [ -e $zip_dir/flamegapps-config.txt ] || [ -e /sdcard/flamegapps-config.txt ]; then
@@ -846,9 +850,6 @@ install_extra() {
     fi
   done
 }
-
-# Ensure gapps list
-[ "$flame_edition" = "basic" ] && gapps_list="$gapps_list_basic" || gapps_list="$gapps_list_full"
 
 # Check for config
 check_gapps_config
