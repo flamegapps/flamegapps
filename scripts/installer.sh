@@ -557,6 +557,8 @@ mount_all() {
     mount -o rw,remount -t auto /system_ext) 2>/dev/null
   fi
 
+  sleep 0.3
+
   if is_mounted /system_root; then
     ui_print "- Device is system-as-root"
     if [ -f /system_root/build.prop ]; then
