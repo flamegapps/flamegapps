@@ -307,6 +307,8 @@ ui_print() {
 
 set_progress() { echo "set_progress $1" >> $OUTFD; }
 
+contains() { echo "$1" | grep -q "$2" && return 0 || return 1; }
+
 is_mounted() { mount | grep -q " $1 "; }
 
 setup_mountpoint() {
@@ -797,6 +799,7 @@ extract_and_install() {
   unzip -o "$ZIPFILE" "tar_${TYPE}/$FILE.tar.xz" -d $TMP
   tar -xf "$SOURCE/$FILE.tar.xz" -C $UNZIP_FOLDER
   rm -rf $SOURCE/$FILE.tar.xz
+  installed_list="$installed_list\n${FILE}"
   file_list="$(find "$EX_SYSTEM/" -mindepth 1 -type f | cut -d/ -f5-)"
   dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
   for file in $file_list; do
@@ -898,44 +901,44 @@ else
 fi
 
 # Delete AOSP PackageInstaller if Google PackageInstaller is present
-if [ -e $SYSTEM/priv-app/GooglePackageInstaller/GooglePackageInstaller.apk ]; then
+if contains "$installed_list" "GooglePackageInstaller"; then
   google_packageinstaller="true"
   remove_fd "$aosp_packageinstaller"
 fi
 
 # Delete provision and lineage setupwizard if Google SetupWizard is present
-if [ -e $SYSTEM/priv-app/SetupWizard/SetupWizard.apk ]; then
+if contains "$installed_list" "SetupWizard"; then
   google_setupwizard="true"
   remove_fd "$provision"
   remove_fd "$lineage_setup"
 fi
 
 # Delete AOSP Dialer if Google Dialer is present
-if [ -e $SYSTEM/priv-app/GoogleDialer/GoogleDialer.apk ]; then
+if contains "$installed_list" "GoogleDialer"; then
   google_dialer="true"
   remove_fd "$aosp_dialer"
 fi
 
 # Delete AOSP Contacts if Google Contacts is present
-if [ -e $SYSTEM/priv-app/GoogleContacts/GoogleContacts.apk ]; then
+if contains "$installed_list" "GoogleContacts"; then
   google_contacts="true"
   remove_fd "$aosp_contacts"
 fi
 
 # Delete AOSP/other Meassages if Google Messages is present
-if [ -e $SYSTEM/app/PrebuiltBugle/PrebuiltBugle.apk ]; then
+if contains "$installed_list" "GoogleMessages"; then
   google_messages="true"
   remove_fd "$stock_messages"
 fi
 
 # Delete AOSP Keyboard if Gboard is present
-if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
+if contains "$installed_list" "GoogleKeyboard"; then
   google_keyboard="true"
   remove_fd "$aosp_keyboard"
 fi
 
 # Delete stock SoundPicker if Google SoundPicker is present
-if [ -e $SYSTEM/app/SoundPickerGooglePrebuilt/SoundPickerGooglePrebuilt.apk ]; then
+if contains "$installed_list" "SoundPickerGoogle"; then
   google_soundpicker="true"
   remove_fd "$stock_soundpicker"
 fi
@@ -1001,11 +1004,11 @@ cat <<EOF' >> $temp_backup_script
 fi
 
 # Create lib symlinks
-if [ -e $SYSTEM/app/MarkupGoogle/MarkupGoogle.apk ]; then
+if contains "$installed_list" "MarkupGoogle"; then
   install -d "$SYSTEM/app/MarkupGoogle/lib/arm64"
   ln -sfn "/system/lib64/libsketchology_native.so" "/system/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
 fi
-if [ -e $SYSTEM/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
+if contains "$installed_list" "GoogleKeyboard"; then
   install -d "$SYSTEM/app/LatinIMEGooglePrebuilt/lib64/arm64"
   ln -sfn "/system/lib64/libjni_latinimegoogle.so" "/system/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
 fi
