@@ -945,7 +945,6 @@ fi
 if [ -e $SYSTEM/priv-app/GoogleDialer/GoogleDialer.apk ]; then
   google_dialer="true"
   remove_fd "$aosp_dialer"
-  chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/product/overlay/GoogleDialerOverlay.apk"
 fi
 
 # Delete AOSP Contacts if Google Contacts is present
