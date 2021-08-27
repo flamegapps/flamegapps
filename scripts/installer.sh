@@ -789,12 +789,14 @@ check_gapps_config() {
   fi
 }
 
-install_core() {
-  set_progress 0.50
-  ui_print "- Installing Core GApps"
-  ui_print " "
-  unzip -o "$ZIPFILE" 'tar_core/*' -d $TMP
-  tar -xf "$CORE_DIR/Core.tar.xz" -C $UNZIP_FOLDER
+extract_and_install() {
+  local TYPE='' SOURCE='' FILE=''
+  TYPE="$1"
+  SOURCE="$2"
+  FILE="$3"
+  unzip -o "$ZIPFILE" "tar_${TYPE}/$FILE.tar.xz" -d $TMP
+  tar -xf "$SOURCE/$FILE.tar.xz" -C $UNZIP_FOLDER
+  rm -rf $SOURCE/$FILE.tar.xz
   file_list="$(find "$EX_SYSTEM/" -mindepth 1 -type f | cut -d/ -f5-)"
   dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
   for file in $file_list; do
@@ -812,8 +814,15 @@ install_core() {
     chcon -h u:object_r:system_file:s0 "$SYSTEM/${dir}"
     chmod 0755 "$SYSTEM/${dir}"
   done
-  rm -rf $CORE_DIR
   rm -rf $UNZIP_FOLDER/*
+}
+
+install_core() {
+  set_progress 0.50
+  ui_print "- Installing Core GApps"
+  ui_print " "
+  extract_and_install "core" "$CORE_DIR" "Core"
+  rm -rf $CORE_DIR
 }
 
 install_gapps() {
@@ -831,27 +840,7 @@ install_gapps() {
     fi
     if [ -n "$gapps" ]; then
       ui_print "- Installing $gapps"
-      unzip -o "$ZIPFILE" "tar_gapps/$gapps.tar.xz" -d $TMP
-      tar -xf "$GAPPS_DIR/$gapps.tar.xz" -C $UNZIP_FOLDER
-      rm -rf $GAPPS_DIR/$gapps.tar.xz
-      file_list="$(find "$EX_SYSTEM/" -mindepth 1 -type f | cut -d/ -f5-)"
-      dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
-      for file in $file_list; do
-        install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
-        if echo "${file}" | grep -q "Overlay.apk"; then
-          overlay_installed="true"
-          chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/${file}"
-        else
-          chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
-        fi
-        chmod 0644 "$SYSTEM/${file}"
-        backup_file_list="$backup_file_list\n${file}"
-      done
-      for dir in $dir_list; do
-        chcon -h u:object_r:system_file:s0 "$SYSTEM/${dir}"
-        chmod 0755 "$SYSTEM/${dir}"
-      done
-      rm -rf $UNZIP_FOLDER/*
+      extract_and_install "gapps" "$GAPPS_DIR" "$gapps"
     fi
   done
 }
@@ -866,27 +855,7 @@ install_extra() {
     fi
     if [ -n "$extra" ]; then
       ui_print "- Installing $extra"
-      unzip -o "$ZIPFILE" "tar_extra/$extra.tar.xz" -d $TMP
-      tar -xf "$EXTRA_DIR/$extra.tar.xz" -C $UNZIP_FOLDER
-      rm -rf $EXTRA_DIR/$extra.tar.xz
-      file_list="$(find "$EX_SYSTEM/" -mindepth 1 -type f | cut -d/ -f5-)"
-      dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
-      for file in $file_list; do
-        install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
-        if echo "${file}" | grep -q "Overlay.apk"; then
-          overlay_installed="true"
-          chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/${file}"
-        else
-          chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
-        fi
-        chmod 0644 "$SYSTEM/${file}"
-        backup_file_list="$backup_file_list\n${file}"
-      done
-      for dir in $dir_list; do
-        chcon -h u:object_r:system_file:s0 "$SYSTEM/${dir}"
-        chmod 0755 "$SYSTEM/${dir}"
-      done
-      rm -rf $UNZIP_FOLDER/*
+      extract_and_install "extra" "$EXTRA_DIR" "$extra"
     fi
   done
 }
