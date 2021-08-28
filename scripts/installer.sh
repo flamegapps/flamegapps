@@ -351,13 +351,7 @@ path_info() {
   ls -RZl $SYSTEM/system_ext > "$log_dir/system_extpathinfo.txt" 2>/dev/null
 }
 
-space_before() {
-  df -h > $log_dir/space_before.txt
-}
-
-space_after() {
-  df -h > $log_dir/space_after.txt
-}
+log_space() { df -h > $log_dir/space_$1.txt; }
 
 take_logs() {
   ui_print " "
@@ -425,7 +419,7 @@ abort() {
 exit_all() {
   sleep 0.5
   path_info
-  space_after
+  log_space "after"
   unmount_all
   sleep 0.5
   set_progress 0.90
@@ -634,7 +628,7 @@ overlay_installed="false"
 buffer_space=2000
 mkdir -p $UNZIP_FOLDER
 mkdir -p $log_dir
-space_before
+log_space "before"
 
 # Get ROM, device & package information
 flame_android=`get_prop ro.flame.android`
