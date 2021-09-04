@@ -359,7 +359,7 @@ take_logs() {
   cp -f $TMP/recovery.log $log_dir/recovery.log
   cd $log_dir
   tar -cz -f "$TMP/flamegapps_debug_logs.tar.gz" *
-  cp -f $TMP/flamegapps_debug_logs.tar.gz $zip_dir/flamegapps_debug_logs.tar.gz
+  cp -f $TMP/flamegapps_debug_logs.tar.gz "$zip_dir/flamegapps_debug_logs.tar.gz"
   cp -f $TMP/flamegapps_debug_logs.tar.gz /sdcard/flamegapps_debug_logs.tar.gz
   cd /
   rm -rf $TMP/flamegapps_debug_logs.tar.gz
