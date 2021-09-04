@@ -771,18 +771,16 @@ echo -e "\n- Removing $flame_edition list files" >> $flame_log
 remove_fd "$removal_list"
 
 check_gapps_config() {
-  if [ -e $zip_dir/flamegapps-config.txt ] || [ -e /sdcard/flamegapps-config.txt ]; then
-    ui_print "- GApps config detected"
-    ui_print " "
-    for p in $zip_dir /sdcard; do
-      if [ -e $p/flamegapps-config.txt ] && [ ! -e $TMP/config.prop ]; then
-        cp -f $p/flamegapps-config.txt $TMP/config.prop
-        cp -f $TMP/config.prop $log_dir/config.prop
-        chmod 0644 $TMP/config.prop
-        gapps_config="true"
-      fi
-    done
-  fi
+  for p in "$zip_dir" /sdcard; do
+    if [ -e "$p/flamegapps-config.txt" ] && [ ! -e $TMP/config.prop ]; then
+      ui_print "- GApps config detected"
+      ui_print " "
+      cp -f "$p/flamegapps-config.txt" $TMP/config.prop
+      cp -f $TMP/config.prop $log_dir/config.prop
+      chmod 0644 $TMP/config.prop
+      gapps_config="true"
+    fi
+  done
 }
 
 extract_and_install() {
