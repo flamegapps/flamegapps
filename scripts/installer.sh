@@ -76,7 +76,11 @@ etc/sysconfig/nexus.xml
 etc/sysconfig/pixel_2018_exclusive.xml
 etc/sysconfig/pixel_experience_2017.xml
 etc/sysconfig/pixel_experience_2018.xml
+framework/com.google.android.dialer.support.jar
+framework/com.google.android.maps.jar
+framework/com.google.android.media.effects.jar
 lib64/libsketchology_native.so
+overlay/forceQueryablePackagesOverlay.apk
 priv-app/AndroidAutoStubPrebuilt
 priv-app/AndroidMigratePrebuilt
 priv-app/AndroidPlatformServices
@@ -126,6 +130,7 @@ app/GalleryGo
 app/GalleryGoPrebuilt
 app/GoogleCalendarSyncAdapter
 app/GoogleContactsSyncAdapter
+app/GoogleExtShared
 app/GoogleLocationHistory
 app/Hangouts
 app/Jelly
@@ -173,8 +178,13 @@ etc/sysconfig/nexus.xml
 etc/sysconfig/pixel_2018_exclusive.xml
 etc/sysconfig/pixel_experience_2017.xml
 etc/sysconfig/pixel_experience_2018.xml
+framework/com.google.android.dialer.support.jar
+framework/com.google.android.maps.jar
+framework/com.google.android.media.effects.jar
 lib64/libjni_latinimegoogle.so
 lib64/libsketchology_native.so
+overlay/forceQueryablePackagesOverlay.apk
+overlay/GoogleDialerOverlay.apk
 priv-app/AndroidAutoStubPrebuilt
 priv-app/AndroidMigratePrebuilt
 priv-app/AndroidPlafoPlatformServices
@@ -217,6 +227,7 @@ priv-app/MarkupGooglePrebuilt
 priv-app/Music
 priv-app/Music2
 priv-app/MusicPrebuilt
+priv-app/Phonesky
 priv-app/Photos
 priv-app/PixelSetupWizard
 priv-app/PrebuiltDeskClock
