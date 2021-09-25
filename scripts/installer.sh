@@ -907,13 +907,11 @@ ui_print "- Performing other tasks"
 [ "$overlay_installed" = "true" ] && chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/product/overlay"
 
 # Check for stock cam removal
-if [ ! "$flame_edition" = "basic" ] && [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.keep.snap")" -eq "1" ]; then
-  remove_camera="false"
-elif [ "$flame_edition" = "basic" ]; then
-  remove_camera="false"
-else
+if [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.remove.snap")" -eq "1" ]; then
   remove_camera="true"
   remove_fd "$stock_camera"
+else
+  remove_camera="false"
 fi
 
 # Delete AOSP PackageInstaller if Google PackageInstaller is present
