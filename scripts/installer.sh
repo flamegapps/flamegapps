@@ -404,6 +404,42 @@ get_prop() {
   fi
 }
 
+get_available_space() {
+  local available_space=0
+  available_space=`df -k $1 | tail -1 | awk '{print $3}'`
+  printf $available_space
+}
+
+check_available_space() {
+  local file_size
+  local partition="$1"
+  [ -e $partition ] || return 1
+  space_required=`get_prop ro.flame.required_size`
+  space_required=$(($space_required + $buffer_space))
+  space_available=$(get_available_space "$partition")
+  for f in $removal_list; do
+    if [ -e "$partition/$f" ]; then
+      file_size=`get_size "$partition/$f"`
+      space_available=$(($space_available + $file_size))
+    fi
+  done
+  echo -e "\n- Available space in ${partition}: $space_available" >> $flame_log
+  if [ "$(get_available_space "$partition")" -ge "$space_required" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# replace_line <file> <line replace string> <replacement line>; modified; for reference, check: https://github.com/osm0sis/AnyKernel3/blob/master/tools/ak3-core.sh
+replace_line() {
+  local line
+  if grep -q "$2" $1; then
+    line=$(grep -n "$2" $1 | cut -d: -f1)
+    sed -i "${line}s;.*;${3};" $1;
+  fi
+}
+
 remove_fd() {
   local LIST="$1"
   for f in $LIST; do
@@ -641,7 +677,7 @@ CORE_DIR="$TMP/tar_core"
 GAPPS_DIR="$TMP/tar_gapps"
 EXTRA_DIR="$TMP/tar_extra"
 UNZIP_FOLDER="$TMP/unzip_dir"
-EX_SYSTEM="$UNZIP_FOLDER/system"
+EX_SYSTEM="$UNZIP_FOLDER/src"
 zip_dir="$(dirname "$ZIPFILE")"
 log_dir="$TMP/flamegapps/logs"
 flame_log="$log_dir/installation_log.txt"
@@ -663,7 +699,6 @@ rom_version=`get_prop ro.build.version.release`
 rom_sdk=`get_prop ro.build.version.sdk`
 device_architecture=`get_prop ro.product.cpu.abilist`
 device_code=`get_prop ro.product.device`
-space_required=`get_prop ro.flame.required_size`
 
 if [ -z "$device_architecture" ]; then
   device_architecture=`get_prop ro.product.cpu.abi`
@@ -755,20 +790,33 @@ else
   abort
 fi
 
-# Check available space for gapps installation
-space_required=$(($space_required + $buffer_space))
-space_available=`df -k $SYSTEM | tail -1 | awk '{print $3}'`
-for f in $removal_list; do
-  if [ -e "$SYSTEM/$f" ]; then
-    file_size=`get_size "$SYSTEM/$f"`
-    space_available=$(($space_available + $file_size))
+# Check available space and choose the preferred partition for gapps installation
+PREFERRED_PARTITION=$SYSTEM
+insufficient_space="true"
+for p in $SYSTEM/system_ext $SYSTEM/product $SYSTEM; do
+  if check_available_space "$p"; then
+    insufficient_space="false"
+    PREFERRED_PARTITION=$p
+    PREFERRED_PARTITION_PREFIX="/system"
+    if contains "$PREFERRED_PARTITION" "/system_ext"; then
+      PREFERRED_PARTITION_NAME="system_ext"
+    elif contains "$PREFERRED_PARTITION" "/product"; then
+      PREFERRED_PARTITION_NAME="product"
+    else
+      PREFERRED_PARTITION_NAME="system"
+      PREFERRED_PARTITION_PREFIX=""
+    fi
+    break
   fi
 done
+
+ui_print " "
+ui_print "- Preferred partition $PREFERRED_PARTITION"
 ui_print " "
 ui_print "- Availabe space: $space_available KB"
 (echo -e "\n- Availabe space $space_available"
 echo -e "\n- Required space $space_required") >> $flame_log
-if [ "$space_available" -lt "$space_required" ]; then
+if [ "$insufficient_space" = "true" ]; then
   ui_print " "
   ui_print "****************** WARNING *******************"
   ui_print " "
@@ -808,10 +856,9 @@ check_gapps_config() {
 }
 
 extract_and_install() {
-  local TYPE='' SOURCE='' FILE=''
-  TYPE="$1"
-  SOURCE="$2"
-  FILE="$3"
+  local TYPE="$1"
+  local SOURCE="$2"
+  local FILE="$3"
   unzip -o "$ZIPFILE" "tar_${TYPE}/$FILE.tar.xz" -d $TMP
   tar -xf "$SOURCE/$FILE.tar.xz" -C $UNZIP_FOLDER
   rm -rf $SOURCE/$FILE.tar.xz
@@ -819,19 +866,33 @@ extract_and_install() {
   file_list="$(find "$EX_SYSTEM/" -mindepth 1 -type f | cut -d/ -f5-)"
   dir_list="$(find "$EX_SYSTEM/" -mindepth 1 -type d | cut -d/ -f5-)"
   for file in $file_list; do
-    install -D "$EX_SYSTEM/${file}" "$SYSTEM/${file}"
-    if echo "${file}" | grep -q "Overlay.apk"; then
+    if contains "$file" "overlay/"; then
+      if [ "$PREFERRED_PARTITION_NAME" = "system" ]; then
+        OVERLAY_DEST='product'
+      else
+        OVERLAY_DEST=$PREFERRED_PARTITION_NAME
+      fi
+      install -D "$EX_SYSTEM/${file}" "$SYSTEM/$OVERLAY_DEST/${file}"
+      chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/$OVERLAY_DEST/${file}"
+      chmod 0644 "$SYSTEM/$OVERLAY_DEST/${file}"
+      backup_file_list="$backup_file_list\n$OVERLAY_DEST/${file}"
       overlay_installed="true"
-      chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/${file}"
     else
-      chcon -h u:object_r:system_file:s0 "$SYSTEM/${file}"
+      install -D "$EX_SYSTEM/${file}" "$PREFERRED_PARTITION/${file}"
+      chcon -h u:object_r:system_file:s0 "$PREFERRED_PARTITION/${file}"
+      chmod 0644 "$PREFERRED_PARTITION/${file}"
+      if [ "$PREFERRED_PARTITION_NAME" = "system" ]; then
+        backup_file_list="$backup_file_list\n${file}"
+      else
+        backup_file_list="$backup_file_list\n${PREFERRED_PARTITION_NAME}/${file}"
+      fi
     fi
-    chmod 0644 "$SYSTEM/${file}"
-    backup_file_list="$backup_file_list\n${file}"
   done
   for dir in $dir_list; do
-    chcon -h u:object_r:system_file:s0 "$SYSTEM/${dir}"
-    chmod 0755 "$SYSTEM/${dir}"
+    if ! contains "$dir" "overlay"; then
+      chcon -h u:object_r:system_file:s0 "$PREFERRED_PARTITION/${dir}"
+      chmod 0755 "$PREFERRED_PARTITION/${dir}"
+    fi
   done
   rm -rf $UNZIP_FOLDER/*
 }
@@ -903,8 +964,8 @@ sleep 0.5
 set_progress 0.80
 ui_print " "
 ui_print "- Performing other tasks"
-# Change context of /product/overlay dir
-[ "$overlay_installed" = "true" ] && chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/product/overlay"
+# Change context of overlay dir
+[ "$overlay_installed" = "true" ] && chcon -h u:object_r:vendor_overlay_file:s0 "$SYSTEM/$OVERLAY_DEST/overlay"
 
 # Check for stock cam removal
 if [ "$gapps_config" = "true" ] && [ "$(get_file_prop $TMP/config.prop "ro.remove.snap")" -eq "1" ]; then
@@ -1019,12 +1080,19 @@ fi
 
 # Create lib symlinks
 if contains "$installed_list" "MarkupGoogle"; then
-  install -d "$SYSTEM/app/MarkupGoogle/lib/arm64"
-  ln -sfn "/system/lib64/libsketchology_native.so" "/system/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
+  install -d "$PREFERRED_PARTITION/app/MarkupGoogle/lib/arm64"
+  ln -sfn "${PREFERRED_PARTITION_PREFIX}/${PREFERRED_PARTITION_NAME}/lib64/libsketchology_native.so" "${PREFERRED_PARTITION_PREFIX}/${PREFERRED_PARTITION_NAME}/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
 fi
 if contains "$installed_list" "GoogleKeyboard"; then
-  install -d "$SYSTEM/app/LatinIMEGooglePrebuilt/lib64/arm64"
-  ln -sfn "/system/lib64/libjni_latinimegoogle.so" "/system/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
+  install -d "$PREFERRED_PARTITION/app/LatinIMEGooglePrebuilt/lib64/arm64"
+  ln -sfn "${PREFERRED_PARTITION_PREFIX}/${PREFERRED_PARTITION_NAME}/lib64/libjni_latinimegoogle.so" "${PREFERRED_PARTITION_PREFIX}/${PREFERRED_PARTITION_NAME}/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
+fi
+
+# Update *.jar file path inside xml files
+if [ ! "$PREFERRED_PARTITION_NAME" = "system" ]; then
+  for f in "com.google.android.dialer.support" "com.google.android.maps" "com.google.android.media.effects"; do
+    replace_line $PREFERRED_PARTITION/etc/permissions/${f}.xml "file=\"/system/framework/${f}.jar\" />" "file=\"${PREFERRED_PARTITION_PREFIX}/${PREFERRED_PARTITION_NAME}/framework/${f}.jar\" />"
+  done
 fi
 
 # Install flame.prop
