@@ -534,12 +534,24 @@ mount_all() {
   case $MOUNT_POINT in
     /system_root) setup_mountpoint /system
     ;;
-    /system) setup_mountpoint /system_root
+    /system)
+      setup_mountpoint /system_root
+      mount -o ro -t auto /system_root
     ;;
   esac
 
+  if ! is_mounted $MOUNT_POINT; then
+    mount -o ro -t auto $MOUNT_POINT
+  fi
+
+  for m in /vendor /product /system_ext; do
+    mount -o ro -t auto $m 2>/dev/null
+  done
+
   if [ "$dynamic_partitions" = "true" ]; then
     ui_print "- Dynamic partition detected"
+    (umount /system
+    umount -l /system) 2>/dev/null
     mount -o ro -t auto /dev/block/mapper/system$SLOT /system_root
     (mount -o ro -t auto /dev/block/mapper/vendor$SLOT /vendor
     mount -o ro -t auto /dev/block/mapper/product$SLOT /product
@@ -554,10 +566,12 @@ mount_all() {
     mount -o rw,remount -t auto /dev/block/mapper/product$SLOT /product
     mount -o rw,remount -t auto /dev/block/mapper/system_ext$SLOT /system_ext) 2>/dev/null
   else
-    mount -o ro -t auto /dev/block/bootdevice/by-name/system$SLOT $MOUNT_POINT
-    (mount -o ro -t auto /dev/block/bootdevice/by-name/vendor$SLOT /vendor
-    mount -o ro -t auto /dev/block/bootdevice/by-name/product$SLOT /product
-    mount -o ro -t auto /dev/block/bootdevice/by-name/system_ext$SLOT /system_ext) 2>/dev/null
+    if ! is_mounted $MOUNT_POINT; then
+      mount -o ro -t auto /dev/block/bootdevice/by-name/system$SLOT $MOUNT_POINT
+      (mount -o ro -t auto /dev/block/bootdevice/by-name/vendor$SLOT /vendor
+      mount -o ro -t auto /dev/block/bootdevice/by-name/product$SLOT /product
+      mount -o ro -t auto /dev/block/bootdevice/by-name/system_ext$SLOT /system_ext) 2>/dev/null
+    fi
     mount -o rw,remount -t auto $MOUNT_POINT
     (mount -o rw,remount -t auto /vendor
     mount -o rw,remount -t auto /product
@@ -583,7 +597,6 @@ mount_all() {
       ui_print "- System is $SYSTEM"
     elif [ -f /system/system/build.prop ]; then
       ui_print "- Device is system-as-root"
-      mkdir -p /system_root
       mount --move /system /system_root
       mount -o bind /system_root/system /system
       SYSTEM=/system_root/system
