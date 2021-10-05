@@ -424,7 +424,7 @@ check_available_space() {
     fi
   done
   echo -e "\n- Available space in ${partition}: $space_available" >> $flame_log
-  if [ "$(get_available_space "$partition")" -ge "$space_required" ]; then
+  if [ "$space_available" -ge "$space_required" ]; then
     return 0
   else
     return 1
