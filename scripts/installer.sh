@@ -358,8 +358,8 @@ clean_up() {
 path_info() {
   ls / > "$log_dir/rootpathinfo.txt"
   ls -RZl $SYSTEM > "$log_dir/systempathinfo.txt"
-  ls -RZl $SYSTEM/product > "$log_dir/productpathinfo.txt" 2>/dev/null
-  ls -RZl $SYSTEM/system_ext > "$log_dir/system_extpathinfo.txt" 2>/dev/null
+  ls -RZl /product > "$log_dir/productpathinfo.txt" 2>/dev/null
+  ls -RZl /system_ext > "$log_dir/systemextpathinfo.txt" 2>/dev/null
 }
 
 log_space() { df -h > $log_dir/space_$1.txt; }
