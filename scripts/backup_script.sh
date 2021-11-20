@@ -1,3 +1,11 @@
+# Find OUTFD like magisk does; for reference, check: https://github.com/topjohnwu/Magisk/blob/master/scripts/addon.d.sh
+OUTFD=$(ps | grep -v 'grep' | grep -oE 'update(.*) 3 [0-9]+' | cut -d" " -f3)
+[ -z $OUTFD ] && OUTFD=$(ps -Af | grep -v 'grep' | grep -oE 'update(.*) 3 [0-9]+' | cut -d" " -f3)
+[ -z $OUTFD ] && OUTFD=$(ps | grep -v 'grep' | grep -oE 'status_fd=[0-9]+' | cut -d= -f2)
+[ -z $OUTFD ] && OUTFD=$(ps -Af | grep -v 'grep' | grep -oE 'status_fd=[0-9]+' | cut -d= -f2)
+
+ui_print() { echo -e "ui_print $1\nui_print" >> /proc/self/fd/$OUTFD; }
+
 mount_extras() {
   local ab_device=$(getprop ro.build.ab_update)
   local dynamic_partition=$(getprop ro.boot.dynamic_partitions)
@@ -45,9 +53,12 @@ case "$1" in
   ;;
   pre-backup)
     mount_extras
+    ui_print "******************************"
+    ui_print "- Backing up FlameGApps       "
+    ui_print "******************************"
   ;;
   post-backup)
-    # Stub
+    ui_print "- Done"
   ;;
   pre-restore)
     mount_extras
@@ -57,8 +68,12 @@ case "$1" in
       rm -rf $SYS/product/$f
       rm -rf $SYS/system_ext/$f
     done
+    ui_print "******************************"
+    ui_print "- Restoring FlameGApps        "
+    ui_print "******************************"
   ;;
   post-restore)
+    ui_print "- Done"
     # Create lib symlinks
     for block in "" product/ system_ext/; do
       if [ -e $SYS/${block}priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk ]; then
