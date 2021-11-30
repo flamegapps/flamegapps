@@ -63,12 +63,12 @@ case "$1" in
     for block in "product" "system_ext"; do
       if [ -e $SYS/$block/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk ]; then
         if [ -e $SYS/$block/app/MarkupGoogle/MarkupGoogle.apk ]; then
-          install -d "/system/$block/app/MarkupGoogle/lib/arm64"
+          install -d "$SYS/$block/app/MarkupGoogle/lib/arm64"
           ln -sfn "/system/$block/lib64/libsketchology_native.so" "/system/$block/app/MarkupGoogle/lib/arm64/libsketchology_native.so"
           chmod 755 "$SYS/$block/app/MarkupGoogle/lib"
         fi
-        if [ -e /system/$block/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
-          install -d "/system/$block/app/LatinIMEGooglePrebuilt/lib64/arm64"
+        if [ -e $SYS/$block/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk ]; then
+          install -d "$SYS/$block/app/LatinIMEGooglePrebuilt/lib64/arm64"
           ln -sfn "/system/$block/lib64/libjni_latinimegoogle.so" "/system/$block/app/LatinIMEGooglePrebuilt/lib64/arm64/libjni_latinimegoogle.so"
         fi
         break
