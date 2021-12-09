@@ -22,8 +22,13 @@ GAPPS_OUT=$ZIP_DIR/tar_gapps
 EXTRA_OUT=$ZIP_DIR/tar_extra
 
 get_size() {
+  local ITEM="$1"
   local FILE_SIZE
-  FILE_SIZE=`du -sk "$1" | cut -f1`
+  if [ -e "$ITEM" ]; then
+    FILE_SIZE=`du -sk "$ITEM" | cut -f1`
+  else
+    FILE_SIZE=0
+  fi
   REQUIRED_SIZE=$(($REQUIRED_SIZE + $FILE_SIZE))
 }
 
