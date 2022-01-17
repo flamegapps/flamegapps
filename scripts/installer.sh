@@ -697,7 +697,7 @@ flame_arch=`get_prop ro.flame.arch`
 flame_edition=`get_prop ro.flame.edition`
 rom_version=`get_prop ro.build.version.release`
 rom_sdk=`get_prop ro.build.version.sdk`
-device_architecture=`get_prop ro.product.cpu.abilist`
+device_architecture=`get_file_prop "$SYSTEM/build.prop" "ro.product.cpu.abilist"`
 device_code=`get_prop ro.product.device`
 
 if [ -z "$device_architecture" ]; then
