@@ -86,6 +86,9 @@ mk_core() {
   if [ "$SDK" -ge "30" ]; then
     copy_file $APK_REPO/sdk-${SDK}/overlay/forceQueryablePackagesOverlay.apk $CORE_DIR/src/overlay/
   fi
+  if [ -e "$APK_REPO/sdk-${SDK}/etc" ]; then
+    copy_file $APK_REPO/sdk-${SDK}/etc $CORE_DIR/src/
+  fi
   compress_core
 }
 
