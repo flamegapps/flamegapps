@@ -83,7 +83,6 @@ mk_core() {
   copy_file $APK_REPO/sdk-${SDK}/priv-app/GoogleServicesFramework $CORE_DIR/src/priv-app/
   copy_file $APK_REPO/sdk-${SDK}/priv-app/PrebuiltGmsCore $CORE_DIR/src/priv-app/
   copy_file $APK_REPO/sdk-all/priv-app/Phonesky $CORE_DIR/src/priv-app/
-  copy_file $APK_REPO/sdk-all/priv-app/GmsCoreSetupPrebuilt $CORE_DIR/src/priv-app/
   if [ "$SDK" -ge "30" ]; then
     copy_file $APK_REPO/sdk-${SDK}/overlay/forceQueryablePackagesOverlay.apk $CORE_DIR/src/overlay/
   fi
