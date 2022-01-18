@@ -84,7 +84,7 @@ mk_core() {
   copy_file $APK_REPO/sdk-${SDK}/priv-app/PrebuiltGmsCore $CORE_DIR/src/priv-app/
   copy_file $APK_REPO/sdk-all/priv-app/Phonesky $CORE_DIR/src/priv-app/
   if [ "$SDK" -ge "30" ]; then
-    copy_file $APK_REPO/sdk-${SDK}/overlay/forceQueryablePackagesOverlay.apk $CORE_DIR/src/overlay/
+    copy_file $APK_REPO/sdk-30/overlay/forceQueryablePackagesOverlay.apk $CORE_DIR/src/overlay/
   fi
   if [ -e "$APK_REPO/sdk-${SDK}/etc" ]; then
     copy_file $APK_REPO/sdk-${SDK}/etc $CORE_DIR/src/
@@ -128,7 +128,11 @@ mk_wellbeing() {
 
 mk_sound_picker() {
   echo ">>> Compressing GoogleSoundPicker"
-  copy_file $APK_REPO/sdk-all/app/SoundPickerGooglePrebuilt $GAPPS_DIR/src/app/
+  if [ "$SDK" -ge "31" ]; then
+    copy_file $APK_REPO/sdk-31/app/SoundPickerGooglePrebuilt $GAPPS_DIR/src/app/
+  else
+    copy_file $APK_REPO/sdk-all/app/SoundPickerGooglePrebuilt $GAPPS_DIR/src/app/
+  fi
   compress_gapps "SoundPickerGoogle.tar.xz"
 }
 
