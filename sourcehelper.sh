@@ -19,7 +19,7 @@ BRANCH='master'
 if [ -d $DEST ]; then
   echo -e "\n${YELLOW}Pulling changes from APK repository $NC"
   cd $DEST
-  git pull origin $BRANCH
+  git-lfs pull origin $BRANCH
   if [ $? -gt 0 ]; then
     echo -e "--!$RED *** Unable to pull changes, please check your internet connection *** $NC"
     echo -e "--!$RED *** The script will now exit *** ${NC}"
@@ -30,7 +30,7 @@ if [ -d $DEST ]; then
   cd ..
 else
   echo -e "\n${YELLOW}Cloning APK repository $NC"
-  git clone --branch $BRANCH --depth 1 $URL $DEST
+  git-lfs clone --branch $BRANCH --depth 1 $URL $DEST
   if [ $? -gt 0 ]; then
     echo -e "--!$RED *** Unable to clone repository, please check your internet connection *** $NC"
     echo -e "--!$RED *** The script will now exit *** $NC"
