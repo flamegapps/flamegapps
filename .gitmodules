@@ -1,0 +1,5 @@
+[submodule "sources/gapps-resources"]
+	path = sources/gapps-resources
+	url = https://gitlab.com/flamegapps/gapps-resources.git
+	branch = main
+	ignore = all

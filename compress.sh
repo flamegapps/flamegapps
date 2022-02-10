@@ -12,7 +12,7 @@
 ###########################################
 #
 
-APK_REPO=repo
+APK_REPO=sources/gapps-resources
 CORE_DIR=temp_core
 GAPPS_DIR=temp_gapps
 EXTRA_DIR=temp_extra

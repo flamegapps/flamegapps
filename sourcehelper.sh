@@ -12,29 +12,18 @@
 ###########################################
 #
 
-URL="https://gitlab.com/flamegapps/gapps-resources.git"
-DEST='repo'
-BRANCH='master'
+echo -e "\n${YELLOW}Updating submodule(s)... $NC"
 
-if [ -d $DEST ]; then
-  echo -e "\n${YELLOW}Pulling changes from APK repository $NC"
-  cd $DEST
-  git pull origin $BRANCH
-  if [ $? -gt 0 ]; then
-    echo -e "--!$RED *** Unable to pull changes, please check your internet connection *** $NC"
-    echo -e "--!$RED *** The script will now exit *** ${NC}"
-    cd ..
-    clean_up
-    exit 1
-  fi
-  cd ..
-else
-  echo -e "\n${YELLOW}Cloning APK repository $NC"
-  git clone --branch $BRANCH --depth 1 $URL $DEST
-  if [ $? -gt 0 ]; then
-    echo -e "--!$RED *** Unable to clone repository, please check your internet connection *** $NC"
-    echo -e "--!$RED *** The script will now exit *** $NC"
-    clean_up
-    exit 1
-  fi
+git submodule update --init --remote --depth=1 'sources/gapps-resources'
+
+if [ "$?" -ne "0" ]; then
+  echo -e "${RED}Something went wrong, unable to clone/update submodule(s) $NC"
+  echo -e "${RED}*** The script will now exit *** $NC"
+  exit 1
 fi
+
+git config --list | grep -q 'filter.lfs.process=git-lfs filter-process' || git submodule foreach 'git lfs install'
+
+git submodule foreach 'git checkout main; git pull --depth=1 --rebase; git lfs pull'
+
+echo -e "${YELLOW}Updated. $NC"
