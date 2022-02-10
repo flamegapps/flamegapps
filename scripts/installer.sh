@@ -405,8 +405,14 @@ get_prop() {
 }
 
 get_available_space() {
-  local available_space=0
-  available_space=`df -k $1 | tail -1 | awk '{print $3}'`
+  local available_space=0 partition_info
+  partition_info=`df -k $1 | tail -n 1`
+  case $partition_info in
+    /dev/*) available_space=`echo "$partition_info" | awk '{print $4}'`
+    ;;
+    *) available_space=`echo "$partition_info" | awk '{print $3}'`
+    ;;
+  esac
   printf $available_space
 }
 
