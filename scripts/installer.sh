@@ -326,6 +326,8 @@ set_progress() { echo "set_progress $1" >> $OUTFD; }
 
 contains() { echo "$1" | grep -q "$2" && return 0 || return 1; }
 
+is_pixel_device() { contains "$pixel_device_list" "$device_code" && return 0 || return 1; }
+
 is_mounted() { mount | grep -q " $1 "; }
 
 setup_mountpoint() {
@@ -698,6 +700,7 @@ backup_script="$TMP/backup_script.sh"
 temp_backup_script="$TMP/temp_backup_script.sh"
 overlay_installed="false"
 buffer_space=2000
+pixel_device_list="sailfish marlin walleye taimen blueline crosshatch sargo bonito flame coral sunfish bramble redfin dragon oriole raven"
 mkdir -p $UNZIP_FOLDER
 mkdir -p $log_dir
 log_space "before"
@@ -867,6 +870,15 @@ check_gapps_config() {
   done
 }
 
+update_gapps_list() {
+  echo -e "\n- Updating gapps list" >> $flame_log
+  if is_pixel_device; then
+    gapps_list=${gapps_list/GoogleRestore}
+  else
+    gapps_list=${gapps_list/AndroidMigrate}
+  fi
+}
+
 extract_and_install() {
   local TYPE="$1"
   local SOURCE="$2"
@@ -919,6 +931,7 @@ install_core() {
 
 install_gapps() {
   set_progress 0.70
+  update_gapps_list
   for g in $gapps_list; do
     local gapps=""
     if [ "$gapps_config" = "true" ]; then
