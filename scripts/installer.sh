@@ -17,9 +17,12 @@
 # List of the basic edition gapps files
 gapps_list_basic="
 AndroidAutoStub
+AndroidMigrate
 CalendarSync
 DigitalWellbeing
+GoogleBackupTransport
 GooglePackageInstaller
+GoogleRestore
 MarkupGoogle
 SetupWizard
 SoundPickerGoogle"
@@ -27,18 +30,21 @@ SoundPickerGoogle"
 # List of the full edition gapps files
 gapps_list_full="
 AndroidAutoStub
+AndroidMigrate
 CalendarSync
 DeviceHealthServices
 DigitalWellbeing
-GoogleClock
-GoogleCalendar
+GoogleBackupTransport
 GoogleCalculator
+GoogleCalendar
+GoogleClock
 GoogleContacts
 GoogleDialer
-GoogleMessages
 GoogleKeyboard
+GoogleMessages
 GooglePackageInstaller
 GooglePhotos
+GoogleRestore
 MarkupGoogle
 SetupWizard
 SoundPickerGoogle
