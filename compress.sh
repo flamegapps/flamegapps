@@ -99,13 +99,28 @@ mk_markup() {
   compress_gapps "MarkupGoogle.tar.xz" 
 }
 
-mk_setup() {
+mk_setup_wizard() {
   echo ">>> Compressing SetupWizard"
   copy_file $APK_REPO/sdk-${SDK}/priv-app/SetupWizard $GAPPS_DIR/src/priv-app/
-  copy_file $APK_REPO/sdk-all/priv-app/AndroidMigratePrebuilt $GAPPS_DIR/src/priv-app/
-  copy_file $APK_REPO/sdk-all/priv-app/GoogleBackupTransport $GAPPS_DIR/src/priv-app/
-  copy_file $APK_REPO/sdk-all/priv-app/GoogleRestore $GAPPS_DIR/src/priv-app/
   compress_gapps "SetupWizard.tar.xz"
+}
+
+mk_android_migrate() {
+  echo ">>> Compressing AndroidMigrate"
+  copy_file $APK_REPO/sdk-all/priv-app/AndroidMigratePrebuilt $GAPPS_DIR/src/priv-app/
+  compress_gapps "AndroidMigrate.tar.xz"
+}
+
+mk_google_restore() {
+  echo ">>> Compressing GoogleRestore"
+  copy_file $APK_REPO/sdk-all/priv-app/GoogleRestore $GAPPS_DIR/src/priv-app/
+  compress_gapps "GoogleRestore.tar.xz"
+}
+
+mk_backup_transport() {
+  echo ">>> Compressing GoogleBackupTransport"
+  copy_file $APK_REPO/sdk-all/priv-app/GoogleBackupTransport $GAPPS_DIR/src/priv-app/
+  compress_gapps "GoogleBackupTransport.tar.xz"
 }
 
 mk_package_installer() {
