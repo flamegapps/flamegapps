@@ -74,34 +74,34 @@ mk_core() {
   copy_file $APK_REPO/sdk-all/etc/permissions $CORE_DIR/src/etc/
   copy_file $APK_REPO/sdk-all/etc/preferred-apps $CORE_DIR/src/etc/
   copy_file $APK_REPO/sdk-all/etc/sysconfig $CORE_DIR/src/etc/
-  copy_file $APK_REPO/sdk-${SDK}/framework $CORE_DIR/src/
-  copy_file $APK_REPO/sdk-${SDK}/app/GoogleContactsSyncAdapter $CORE_DIR/src/app/
-  copy_file $APK_REPO/sdk-${SDK}/app/GoogleExtShared $CORE_DIR/src/app/
-  copy_file $APK_REPO/sdk-${SDK}/priv-app/CarrierSetup $CORE_DIR/src/priv-app/
-  copy_file $APK_REPO/sdk-${SDK}/priv-app/ConfigUpdater $CORE_DIR/src/priv-app/
-  copy_file $APK_REPO/sdk-${SDK}/priv-app/GoogleExtServices $CORE_DIR/src/priv-app/
-  copy_file $APK_REPO/sdk-${SDK}/priv-app/GoogleServicesFramework $CORE_DIR/src/priv-app/
-  copy_file $APK_REPO/sdk-${SDK}/priv-app/PrebuiltGmsCore $CORE_DIR/src/priv-app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/framework $CORE_DIR/src/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/app/GoogleContactsSyncAdapter $CORE_DIR/src/app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/app/GoogleExtShared $CORE_DIR/src/app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/priv-app/CarrierSetup $CORE_DIR/src/priv-app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/priv-app/ConfigUpdater $CORE_DIR/src/priv-app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/priv-app/GoogleExtServices $CORE_DIR/src/priv-app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/priv-app/GoogleServicesFramework $CORE_DIR/src/priv-app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/priv-app/PrebuiltGmsCore $CORE_DIR/src/priv-app/
   copy_file $APK_REPO/sdk-all/priv-app/Phonesky $CORE_DIR/src/priv-app/
   if [ "$SDK" -ge "30" ]; then
     copy_file $APK_REPO/sdk-30/overlay/forceQueryablePackagesOverlay.apk $CORE_DIR/src/overlay/
   fi
-  if [ -e "$APK_REPO/sdk-${SDK}/etc" ]; then
-    copy_file $APK_REPO/sdk-${SDK}/etc $CORE_DIR/src/
+  if [ -e "$APK_REPO/sdk-${SOURCE_SDK}/etc" ]; then
+    copy_file $APK_REPO/sdk-${SOURCE_SDK}/etc $CORE_DIR/src/
   fi
   compress_core
 }
 
 mk_markup() {
   echo ">>> Compressing MarkupGoogle"
-  copy_file $APK_REPO/sdk-${SDK}/app/MarkupGoogle $GAPPS_DIR/src/app/
-  copy_file $APK_REPO/sdk-${SDK}/lib64/libsketchology_native.so $GAPPS_DIR/src/lib64/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/app/MarkupGoogle $GAPPS_DIR/src/app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/lib64/libsketchology_native.so $GAPPS_DIR/src/lib64/
   compress_gapps "MarkupGoogle.tar.xz" 
 }
 
 mk_setup_wizard() {
   echo ">>> Compressing SetupWizard"
-  copy_file $APK_REPO/sdk-${SDK}/priv-app/SetupWizard $GAPPS_DIR/src/priv-app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/priv-app/SetupWizard $GAPPS_DIR/src/priv-app/
   compress_gapps "SetupWizard.tar.xz"
 }
 
@@ -125,7 +125,7 @@ mk_backup_transport() {
 
 mk_package_installer() {
   echo ">>> Compressing GooglePackageInstaller"
-  copy_file $APK_REPO/sdk-${SDK}/priv-app/GooglePackageInstaller $GAPPS_DIR/src/priv-app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/priv-app/GooglePackageInstaller $GAPPS_DIR/src/priv-app/
   compress_gapps "GooglePackageInstaller.tar.xz" 
 }
 
@@ -215,7 +215,7 @@ mk_android_auto_stub() {
 
 mk_wall_picker() {
   echo ">>> Compressing WallpaperPickerGoogle"
-  copy_file $APK_REPO/sdk-${SDK}/app/WallpaperPickerGooglePrebuilt $GAPPS_DIR/src/app/
+  copy_file $APK_REPO/sdk-${SOURCE_SDK}/app/WallpaperPickerGooglePrebuilt $GAPPS_DIR/src/app/
   compress_gapps "WallpaperPickerGoogle.tar.xz"
 }
 

@@ -137,12 +137,19 @@ clean_up() {
 if [ "$arg_1" = "10" ]; then
   ANDROID=10.0
   SDK=29
+  SOURCE_SDK=29
 elif [ "$arg_1" = "11" ]; then
   ANDROID=11.0
   SDK=30
+  SOURCE_SDK=30
 elif [ "$arg_1" = "12" ]; then
   ANDROID=12.0
   SDK=31
+  SOURCE_SDK=31
+elif [ "$arg_1" = "12.1" ]; then
+  ANDROID=12.1
+  SDK=32
+  SOURCE_SDK=31
 else
   echo -e "${RED} *** Please mention a valid android version *** ${NC}"
   exit 1
