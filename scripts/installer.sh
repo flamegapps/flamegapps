@@ -330,27 +330,23 @@ is_pixel_device() { contains "$pixel_device_list" "$device_code" && return 0 || 
 
 is_mounted() { mount | grep -q " $1 "; }
 
+find_slot() {
+  local slot=$(getprop ro.boot.slot_suffix 2>/dev/null)
+  [ "$slot" ] || slot=$(grep -o 'androidboot.slot_suffix=.*$' /proc/cmdline | cut -d\  -f1 | cut -d= -f2)
+  if [ ! "$slot" ]; then
+    slot=$(getprop ro.boot.slot 2>/dev/null)
+    [ "$slot" ] || slot=$(grep -o 'androidboot.slot=.*$' /proc/cmdline | cut -d\  -f1 | cut -d= -f2)
+    [ "$slot" ] && slot=_$slot
+  fi
+  [ "$slot" ] && echo "$slot"
+}
+
 setup_mountpoint() {
   [ -L $1 ] && mv -f $1 ${1}_link
   if [ ! -d $1 ]; then
     rm -f $1
     mkdir -p $1
   fi
-}
-
-recovery_actions() {
-  OLD_LD_LIB=$LD_LIBRARY_PATH
-  OLD_LD_PRE=$LD_PRELOAD
-  OLD_LD_CFG=$LD_CONFIG_FILE
-  unset LD_LIBRARY_PATH
-  unset LD_PRELOAD
-  unset LD_CONFIG_FILE
-}
-
-recovery_cleanup() {
-  [ -z $OLD_LD_LIB ] || export LD_LIBRARY_PATH=$OLD_LD_LIB
-  [ -z $OLD_LD_PRE ] || export LD_PRELOAD=$OLD_LD_PRE
-  [ -z $OLD_LD_CFG ] || export LD_CONFIG_FILE=$OLD_LD_CFG
 }
 
 clean_up() {
@@ -497,42 +493,41 @@ exit_all() {
 
 mount_apex() {
   # For reference, check: https://github.com/osm0sis/AnyKernel3/blob/master/META-INF/com/google/android/update-binary
-  if [ -d $SYSTEM/apex ]; then
-    local apex dest loop minorx num
-    setup_mountpoint /apex
-    minorx=1
-    [ -e /dev/block/loop1 ] && minorx=$(ls -l /dev/block/loop1 | awk '{ print $6 }')
-    num=0
-    for apex in $SYSTEM/apex/*; do
-      dest=/apex/$(basename $apex .apex)
-      [ "$dest" = /apex/com.android.runtime.release ] && dest=/apex/com.android.runtime
-      mkdir -p $dest
-      case $apex in
-        *.apex)
-          unzip -qo $apex apex_payload.img -d /apex
-          mv -f /apex/apex_payload.img $dest.img
-          mount -t ext4 -o ro,noatime $dest.img $dest 2>/dev/null
+  [ -d /system_root/system/apex ] || return 1
+  local apex dest loop minorx num
+  setup_mountpoint /apex
+  minorx=1
+  [ -e /dev/block/loop1 ] && minorx=$(ls -l /dev/block/loop1 | awk '{ print $6 }')
+  num=0
+  for apex in /system_root/system/apex/*; do
+    dest=/apex/$(basename $apex .apex)
+    [ "$dest" = /apex/com.android.runtime.release ] && dest=/apex/com.android.runtime
+    mkdir -p $dest
+    case $apex in
+      *.apex)
+        unzip -qo $apex apex_payload.img -d /apex
+        mv -f /apex/apex_payload.img $dest.img
+        mount -t ext4 -o ro,noatime $dest.img $dest 2>/dev/null
+        if [ $? != 0 ]; then
+          while [ $num -lt 64 ]; do
+            loop=/dev/block/loop$num
+            (mknod $loop b 7 $((num * minorx))
+            losetup $loop $dest.img) 2>/dev/null
+            num=$((num + 1))
+            losetup $loop | grep -q $dest.img && break
+          done
+          mount -t ext4 -o ro,loop,noatime $loop $dest
           if [ $? != 0 ]; then
-            while [ $num -lt 64 ]; do
-              loop=/dev/block/loop$num
-              (mknod $loop b 7 $((num * minorx))
-              losetup $loop $dest.img) 2>/dev/null
-              num=$((num + 1))
-              losetup $loop | grep -q $dest.img && break
-            done
-            mount -t ext4 -o ro,loop,noatime $loop $dest
-            if [ $? != 0 ]; then
-              losetup -d $loop 2>/dev/null
-            fi
+            losetup -d $loop 2>/dev/null
           fi
-        ;;
-        *) mount -o bind $apex $dest;;
-      esac
-    done
-    export ANDROID_RUNTIME_ROOT=/apex/com.android.runtime
-    export ANDROID_TZDATA_ROOT=/apex/com.android.tzdata
-    export BOOTCLASSPATH=/apex/com.android.runtime/javalib/core-oj.jar:/apex/com.android.runtime/javalib/core-libart.jar:/apex/com.android.runtime/javalib/okhttp.jar:/apex/com.android.runtime/javalib/bouncycastle.jar:/apex/com.android.runtime/javalib/apache-xml.jar:/system/framework/framework.jar:/system/framework/ext.jar:/system/framework/telephony-common.jar:/system/framework/voip-common.jar:/system/framework/ims-common.jar:/system/framework/android.test.base.jar:/system/framework/telephony-ext.jar:/apex/com.android.conscrypt/javalib/conscrypt.jar:/apex/com.android.media/javalib/updatable-media.jar
-  fi
+        fi
+      ;;
+      *) mount -o bind $apex $dest;;
+    esac
+  done
+  export ANDROID_RUNTIME_ROOT=/apex/com.android.runtime
+  export ANDROID_TZDATA_ROOT=/apex/com.android.tzdata
+  export BOOTCLASSPATH=/apex/com.android.runtime/javalib/core-oj.jar:/apex/com.android.runtime/javalib/core-libart.jar:/apex/com.android.runtime/javalib/okhttp.jar:/apex/com.android.runtime/javalib/bouncycastle.jar:/apex/com.android.runtime/javalib/apache-xml.jar:/system/framework/framework.jar:/system/framework/ext.jar:/system/framework/telephony-common.jar:/system/framework/voip-common.jar:/system/framework/ims-common.jar:/system/framework/android.test.base.jar:/system/framework/telephony-ext.jar:/apex/com.android.conscrypt/javalib/conscrypt.jar:/apex/com.android.media/javalib/updatable-media.jar
 }
 
 unmount_apex() {
@@ -551,118 +546,86 @@ unmount_apex() {
 }
 
 mount_all() {
+  # For reference, check: https://github.com/osm0sis/AnyKernel3/blob/master/META-INF/com/google/android/update-binary
   set_progress 0.10
+  ui_print " "
   ui_print "- Mounting partitions"
   sleep 1
-  dynamic_partitions=`getprop ro.boot.dynamic_partitions`
-  SLOT=`getprop ro.boot.slot_suffix`
-  [ -n "$SLOT" ] && ui_print "- Current boot slot: $SLOT"
+
+  local byname mount slot system
 
   if ! is_mounted /cache; then
     if [ -d /cache ]; then
+      ui_print "- Mounting /cache"
       mount /cache
       unmount_cache=true
     fi
   fi
   if ! is_mounted /data; then
     if [ -d /data ]; then
+      ui_print "- Mounting /data"
       mount /data
       unmount_data=true
     fi
   fi
 
-  if [ -f /etc/fstab ]; then
-    if [ -n "$(cat /etc/fstab | grep /system_root)" ]; then
-      MOUNT_POINT=/system_root
-    else
-      MOUNT_POINT=/system
-    fi
-  else
-    MOUNT_POINT=$ANDROID_ROOT
+  for mount in /vendor /product /system_ext; do
+    ui_print "- Mounting $mount"
+    mount -o ro -t auto $mount 2>/dev/null
+  done
+
+  setup_mountpoint $ANDROID_ROOT
+
+  if ! is_mounted $ANDROID_ROOT; then
+    ui_print "- Mounting $ANDROID_ROOT"
+    mount -o ro -t auto $ANDROID_ROOT
   fi
 
-  case $MOUNT_POINT in
-    /system_root) setup_mountpoint /system
-    ;;
+  byname=bootdevice/by-name
+  [ -d /dev/block/$byname ] || byname=$(find /dev/block/platform -type d -name by-name 2>/dev/null | head -n1 | cut -d/ -f4-)
+  [ -d /dev/block/mapper ] && byname=mapper
+  [ -e /dev/block/$byname/system ] || slot=$(find_slot)
+
+  case $ANDROID_ROOT in
+    /system_root) setup_mountpoint /system;;
     /system)
-      setup_mountpoint /system_root
-      mount -o ro -t auto /system_root
+      if ! is_mounted /system && ! is_mounted /system_root; then
+        setup_mountpoint /system_root
+        mount -o ro -t auto /system_root
+      elif [ -f /system/system/build.prop ]; then
+        setup_mountpoint /system_root
+        mount --move /system /system_root
+      fi
+      if [ $? != 0 ]; then
+        (umount /system
+        umount -l /system) 2>/dev/null
+        mount -o ro -t auto /dev/block/$byname/system$slot /system_root
+      fi
     ;;
   esac
 
-  if ! is_mounted $MOUNT_POINT; then
-    mount -o ro -t auto $MOUNT_POINT
-  fi
-
-  for m in /vendor /product /system_ext; do
-    mount -o ro -t auto $m 2>/dev/null
+  [ -f /system_root/system/build.prop ] && system=/system
+  for mount in /vendor /product /system_ext; do
+    if ! is_mounted $mount && [ -L /system$mount -o -L /system_root$system$mount ]; then
+      setup_mountpoint $mount
+      mount -o ro -t auto /dev/block/$byname$mount$slot $mount
+    fi
   done
 
-  if [ "$dynamic_partitions" = "true" ]; then
-    ui_print "- Dynamic partition detected"
-    (umount /system
-    umount -l /system) 2>/dev/null
-    mount -o ro -t auto /dev/block/mapper/system$SLOT /system_root
-    (mount -o ro -t auto /dev/block/mapper/vendor$SLOT /vendor
-    mount -o ro -t auto /dev/block/mapper/product$SLOT /product
-    mount -o ro -t auto /dev/block/mapper/system_ext$SLOT /system_ext) 2>/dev/null
-    for block in system vendor product system_ext; do
-      for slot in "" _a _b; do
-        blockdev --setrw /dev/block/mapper/$block$slot 2>/dev/null
-      done
-    done
-    mount -o rw,remount -t auto /dev/block/mapper/system$SLOT /system_root
-    (mount -o rw,remount -t auto /dev/block/mapper/vendor$SLOT /vendor
-    mount -o rw,remount -t auto /dev/block/mapper/product$SLOT /product
-    mount -o rw,remount -t auto /dev/block/mapper/system_ext$SLOT /system_ext) 2>/dev/null
-  else
-    if ! is_mounted $MOUNT_POINT; then
-      mount -o ro -t auto /dev/block/bootdevice/by-name/system$SLOT $MOUNT_POINT
-      (mount -o ro -t auto /dev/block/bootdevice/by-name/vendor$SLOT /vendor
-      mount -o ro -t auto /dev/block/bootdevice/by-name/product$SLOT /product
-      mount -o ro -t auto /dev/block/bootdevice/by-name/system_ext$SLOT /system_ext) 2>/dev/null
-    fi
-    mount -o rw,remount -t auto $MOUNT_POINT
-    (mount -o rw,remount -t auto /vendor
-    mount -o rw,remount -t auto /product
-    mount -o rw,remount -t auto /system_ext) 2>/dev/null
-  fi
-
-  sleep 0.3
-
   if is_mounted /system_root; then
-    ui_print "- Device is system-as-root"
-    if [ -f /system_root/build.prop ]; then
-      mount -o bind /system_root /system
-      SYSTEM=/system_root
-      ui_print "- System is $SYSTEM"
-    else
-      mount -o bind /system_root/system /system
-      SYSTEM=/system_root/system
-      ui_print "- System is $SYSTEM"
-    fi
-  elif is_mounted /system; then
-    if [ -f /system/build.prop ]; then
-      SYSTEM=/system
-      ui_print "- System is $SYSTEM"
-    elif [ -f /system/system/build.prop ]; then
-      ui_print "- Device is system-as-root"
-      mount --move /system /system_root
-      mount -o bind /system_root/system /system
-      SYSTEM=/system_root/system
-      ui_print "- System is /system/system"
-    fi
-  else
-    ui_print "- Failed to mount/detect system"
-    abort
+    mount_apex
+    mount -o bind /system_root$system /system
   fi
-  mount_apex
 }
 
 unmount_all() {
   ui_print " "
   ui_print "- Unmounting partitions"
-  unmount_apex
+  local mount
+  [ "$OLD_LD_PATH" ] && export LD_LIBRARY_PATH=$OLD_LD_PATH
+  [ "$OLD_LD_PRE" ] && export LD_PRELOAD=$OLD_LD_PRE
+  [ "$OLD_LD_CFG" ] && export LD_CONFIG_FILE=$OLD_LD_CFG
+  unset OLD_LD_PATH OLD_LD_PRE OLD_LD_CFG
   if [ "$unmount_data" ]; then
     umount /data
     umount -l /data
@@ -671,20 +634,51 @@ unmount_all() {
     umount /cache
     umount -l /cache
   fi
-  for m in /system /system_root /product /system_ext /vendor; do
-    if [ -e $m ]; then
-      (umount $m
-      umount -l $m) 2>/dev/null
+  unmount_apex
+  for mount in /system /system_root /mnt/system /vendor /mnt/vendor /product /mnt/product /system_ext /mnt/system_ext; do
+    if [ -e $mount ]; then
+      (umount $mount
+      umount -l $mount) 2>/dev/null
     fi
   done
 }
 
-[ -z "$ANDROID_ROOT" ] && ANDROID_ROOT=/system
-mount -o bind /dev/urandom /dev/random
-unmount_all
-mount_all
+# ------------------------ Start the Installation -----------------------------
 
-recovery_actions
+[ "$ANDROID_ROOT" ] || ANDROID_ROOT=/system
+
+BOOTMODE=false
+ps | grep zygote | grep -v grep >/dev/null && BOOTMODE=true
+$BOOTMODE || ps -A 2>/dev/null | grep zygote | grep -v grep >/dev/null && BOOTMODE=true
+
+if ! $BOOTMODE; then
+  mount -o bind /dev/urandom /dev/random
+  if [ -L /etc ]; then
+    setup_mountpoint /etc
+    cp -af /etc_link/* /etc
+    sed -i 's; / ; /system_root ;' /etc/fstab
+  fi
+  unmount_all
+  mount_all
+  OLD_LD_PATH=$LD_LIBRARY_PATH
+  OLD_LD_PRE=$LD_PRELOAD
+  OLD_LD_CFG=$LD_CONFIG_FILE
+  unset LD_LIBRARY_PATH LD_PRELOAD LD_CONFIG_FILE
+fi
+
+if [ -d /dev/block/mapper ]; then
+  for block in system vendor product; do
+    for slot in "" _a _b; do
+      blockdev --setrw /dev/block/mapper/$block$slot 2>/dev/null
+    done
+  done
+fi
+
+mount -o rw,remount -t auto /system
+(mount -o rw,remount -t auto /vendor
+mount -o rw,remount -t auto /product) 2>/dev/null
+
+SYSTEM=/system
 
 PROPFILES="$SYSTEM/build.prop $TMP/flame.prop"
 CORE_DIR="$TMP/tar_core"
@@ -734,10 +728,7 @@ esac
 
 echo ------------------------------------------------------------------- >> $flame_log
 (echo "  --------------- FlameGApps Installation Logs ---------------"
-echo "- Mount Point: $MOUNT_POINT"
 echo "- Android Root: $ANDROID_ROOT"
-echo "- Current slot: $SLOT"
-echo "- Dynamic partition: $dynamic_partitions"
 echo "- Flame version: $flame_android"
 echo "- Flame SDK: $flame_sdk"
 echo "- Flame ARCH: $flame_arch"
