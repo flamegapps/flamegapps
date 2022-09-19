@@ -676,7 +676,8 @@ fi
 
 mount -o rw,remount -t auto /system
 (mount -o rw,remount -t auto /vendor
-mount -o rw,remount -t auto /product) 2>/dev/null
+mount -o rw,remount -t auto /product
+mount -o rw,remount -t auto /system_ext) 2>/dev/null
 
 SYSTEM=/system
 
