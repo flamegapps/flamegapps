@@ -150,6 +150,10 @@ elif [ "$arg_1" = "12.1" ]; then
   ANDROID=12.1
   SDK=32
   SOURCE_SDK=31
+elif [ "$arg_1" = "13" ]; then
+  ANDROID=13
+  SDK=33
+  SOURCE_SDK=33
 else
   echo -e "${RED} *** Please mention a valid android version *** ${NC}"
   exit 1
